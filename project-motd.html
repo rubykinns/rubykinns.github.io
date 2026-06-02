@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOTD — Yeeun Kim</title>
+  <link rel="icon" type="image/png" href="yk-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink:        #0D1B2A;
+      --paper:      #FFFFFF;
+      --white:      #F4F8FC;
+      --stone:      #E0EAF4;
+      --mist:       #94A3B8;
+      --navy:       #1A3A5C;
+      --navy-mid:   #2D5F8A;
+      --navy-light: #C8DFF2;
+      --navy-pale:  #EEF5FB;
+      --navy-glow:  #93C4E8;
+      --rust:       #1E54B7;
+      --ff-display: 'Fraunces', Georgia, serif;
+      --ff-body:    'Instrument Sans', sans-serif;
+    }
+    a { color: inherit; text-decoration: none; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; font-weight: 300; }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; padding: 1.1rem 4rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--stone); }
+    .nav-logo { font-family: 'Fraunces', Georgia, serif; font-size: 1.1rem; font-weight: 300; font-style: italic; letter-spacing: 0.02em; text-decoration: none; color: var(--ink); }
+    .nav-logo span { font-style: normal; color: var(--navy-mid); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; text-decoration: none; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-resume { color: var(--navy) !important; border: 1px solid var(--stone); padding: 0.35rem 1rem; border-radius: 100px; transition: background 0.2s, color 0.2s !important; }
+    .nav-resume:hover { background: var(--navy); color: white !important; }
+
+    /* HERO */
+    .case-hero { background: var(--navy); padding: 1rem 4rem 0; position: relative; overflow: hidden; }
+    .case-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 75% 40%, rgba(147,196,232,0.15) 0%, transparent 65%); pointer-events: none; }
+    .hero-inner { max-width: 860px; margin: 0 auto; position: relative; }
+    .case-tag { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--navy-glow); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--navy-glow); }
+    .case-title { font-family: 'Fraunces', serif; font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 200; line-height: 1.0; letter-spacing: -0.03em; color: #fff; margin-bottom: 0.6rem; }
+    .case-subtitle { font-size: 1rem; font-weight: 300; color: rgba(255,255,255,0.45); margin-bottom: 0.5rem; }
+    .hero-cover { width: 100%; margin-top: 2rem; border-radius: 8px 8px 0 0; overflow: hidden; }
+    .hero-cover img { width: 100%; height: 410px; display: block; object-fit: cover; object-position: top; }
+
+    /* META */
+    .case-meta { background: var(--navy-pale); border-bottom: 1px solid var(--navy-light); padding: 0 4rem; }
+    .case-meta-inner { justify-content: space-between; margin: 0 auto; display: flex; flex-wrap: wrap; }
+    .meta-item { padding: 1.5rem 2.5rem 1.5rem 0; margin-right: 2.5rem; border-right: 1px solid var(--navy-light); }
+    .meta-item:last-child { border-right: none; }
+    .meta-item label { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--navy-mid); margin-bottom: 0.35rem; }
+    .meta-item span { font-size: 0.88rem; font-weight: 500; color: var(--ink); }
+
+    /* JUMP LINK */
+    .jump-link { display: block; text-align: center; padding: 1rem; background: var(--navy-light); color: var(--navy); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
+    .jump-link:hover { background: var(--navy-glow); }
+
+    /* BODY */
+    .case-body { max-width: 1300px; margin: 0 auto; padding: 4rem 4rem 8rem; }
+
+    /* TOC */
+    .case-toc { display: none; }
+    @media (min-width: 1440px) {
+      .case-toc { display: block; position: fixed; top: 6rem; left: max(1.5rem, calc(50% - 780px)); width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+      .case-toc.toc-visible { opacity: 1; pointer-events: all; }
+    }
+    .toc-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 1rem; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .toc-list a { font-size: 0.78rem; color: var(--mist); text-decoration: none; display: block; padding: 0.2rem 0 0.2rem 0.75rem; border-left: 2px solid transparent; transition: color 0.2s, border-color 0.2s; line-height: 1.4; }
+    .toc-list a:hover { color: var(--navy); border-left-color: var(--navy); }
+
+    /* SECTIONS */
+    .case-section { margin-bottom: 5rem; scroll-margin-top: 6rem; }
+    .case-section h2 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 300; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--navy-light); }
+    .case-section h3 { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 400; color: var(--navy); margin: 2rem 0 0.75rem; }
+    .case-section h4 { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy-mid); margin: 1.5rem 0 0.6rem; }
+    .case-section p { font-size: 0.95rem; line-height: 1.9; color: #475569; margin-bottom: 1rem; }
+    .case-section ul { margin: 0.75rem 0 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.45rem; }
+    .case-section ul li { font-size: 0.92rem; line-height: 1.75; color: #475569; }
+    .case-section ol { margin: 0.75rem 0 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.45rem; }
+    .case-section ol li { font-size: 0.92rem; line-height: 1.75; color: #475569; }
+
+    /* IMAGES */
+    figure.case-img { width: 100%; border-radius: 8px; overflow: hidden; margin: 1.75rem 0; border: 1px solid var(--navy-light); }
+    figure.case-img img { width: 100%; display: block; }
+    figure.case-img figcaption { font-size: 0.7rem; color: var(--mist); letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; background: var(--navy-pale); border-top: 1px solid var(--navy-light); }
+
+    .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.75rem 0; }
+    .img-grid-2 figure { border-radius: 8px; overflow: hidden; border: 1px solid var(--navy-light); margin: 0; }
+    .img-grid-2 img { width: 100%; display: block; }
+    .img-grid-2 figcaption { font-size: 0.68rem; color: var(--mist); letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 0.75rem; background: var(--navy-pale); border-top: 1px solid var(--navy-light); }
+
+    .img-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1.75rem 0; }
+    .img-grid-3 figure { border-radius: 8px; overflow: hidden; border: 1px solid var(--navy-light); margin: 0; }
+    .img-grid-3 img { width: 100%; display: block; }
+    .img-grid-3 figcaption { font-size: 0.65rem; color: var(--mist); letter-spacing: 0.08em; text-transform: uppercase; padding: 0.4rem 0.6rem; background: var(--navy-pale); border-top: 1px solid var(--navy-light); }
+
+    /* FINDING BOX */
+    .finding-box { background: var(--navy-light); border-left: 3px solid var(--navy); padding: 1.25rem 1.5rem; margin: 1.75rem 0; border-radius: 0 6px 6px 0; }
+    .finding-box strong { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--navy); margin-bottom: 0.5rem; }
+    .finding-box p { font-size: 0.92rem; line-height: 1.75; color: var(--ink) !important; margin: 0 !important; }
+
+    /* PHASE LABEL */
+    .phase-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--navy); background: var(--navy-light); display: inline-block; padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1.25rem; }
+
+    /* STAT GRID */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--navy-light); border: 1px solid var(--navy-light); border-radius: 6px; overflow: hidden; margin: 1.75rem 0; }
+    .stat-cell { background: var(--white); padding: 1.25rem; text-align: center; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 200; color: var(--navy); line-height: 1; margin-bottom: 0.3rem; }
+    .stat-label { font-size: 0.68rem; color: var(--mist); letter-spacing: 0.05em; }
+
+    /* NEXT PROJECT */
+    .next-project { border-top: 1px solid var(--navy-light); padding: 3rem 4rem; max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .next-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.5rem; }
+    .next-title { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: color 0.2s; }
+    .next-title:hover { color: var(--navy); }
+
+     /* ── FOOTER ── */
+    footer { padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem); border-top: 1px solid var(--stone); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .footer-sign { font-family: var(--ff-display); font-size: 0.95rem; font-weight: 300; font-style: italic; color: var(--mist); }
+    .footer-links { display: flex; gap: 1.75rem; }
+    .footer-links a { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-copy { font-size: 0.72rem; color: var(--mist); }
+
+    /* YOUTUBE FACADE */
+    .yt-facade {
+      position: relative; width: 100%; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; margin: 1.75rem 0;
+      border: 1px solid var(--navy-light); cursor: pointer; background: #000;
+    }
+    .yt-facade img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+    .yt-facade:hover img { transform: scale(1.02); }
+    .yt-facade-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+    .yt-facade:hover .yt-facade-overlay { background: rgba(0,0,0,0.5); }
+    .yt-play-btn { width: 72px; height: 72px; border-radius: 50%; background: #FF0000; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 24px rgba(0,0,0,0.4); transition: transform 0.2s, background 0.2s; }
+    .yt-facade:hover .yt-play-btn { transform: scale(1.12); background: #cc0000; }
+    .yt-play-btn svg { width: 28px; height: 28px; fill: white; margin-left: 4px; }
+    .yt-facade iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: none; }
+    .yt-facade.playing img, .yt-facade.playing .yt-facade-overlay { display: none; }
+    .yt-facade.playing iframe { display: block; }
+    @media (max-width: 760px) {
+      nav { padding: 1rem 1.5rem; }
+      .case-hero { padding: 4rem 1.5rem 0; }
+      .case-meta { padding: 0 1.5rem; }
+      .case-body { padding: 2rem 1.5rem 5rem; }
+      .next-project { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; }
+      .stat-grid { grid-template-columns: repeat(2,1fr); }
+      .img-grid-2, .img-grid-3 { grid-template-columns: 1fr; }
+      .meta-item { padding: 1rem 1rem 1rem 0; margin-right: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <div class="nav-links">
+      <a href="index.html">Work</a>
+      <a href="about.html">About</a>
+      <a href="publications.html">Publications</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank" class="nav-resume">Resume</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="case-hero">
+    <div class="hero-inner">
+      <p class="case-tag">UX/UI Research & Design · D.REAM Academy HCI Lab · Yonsei University</p>
+      <h1 class="case-title">MOTD</h1>
+      <p class="case-subtitle">Mobility of the Day — AI-Powered Personal Mobility Route Recommender</p>
+      <div class="hero-cover">
+        <img src="assets/motd/hero.png" alt="MOTD — Mobility of the Day">
+      </div>
+    </div>
+  </div>
+
+  <!-- META -->
+  <div class="case-meta">
+    <div class="case-meta-inner">
+      <div class="meta-item"><label>Role</label><span>UX/UI Researcher/ Designer </span></div>
+      <div class="meta-item"><label>Institution</label><span>D.REAM Academy — HCI Lab, Yonsei University</span></div>
+      <div class="meta-item"><label>Location</label><span>Seoul, South Korea</span></div>
+      <div class="meta-item"><label>Theme</label><span>2019 'Connected AI'</span></div>
+      <div class="meta-item"><label>Type</label><span>AI Service · Mobile App</span></div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <aside class="case-toc" id="caseToc">
+    <p class="toc-label">Contents</p>
+    <ul class="toc-list">
+      <li><a href="#about">About</a></li>
+      <li><a href="#logo">Logo</a></li>
+      <li><a href="#ai-navigation">AI Navigation</a></li>
+      <li><a href="#routes">Routes</a></li>
+      <li><a href="#how-to-use">How to Use</a></li>
+      <li><a href="#share">Share Your Route</a></li>
+      <li><a href="#video">Video</a></li>
+    </ul>
+  </aside>
+
+  <div class="case-body">
+
+    <!-- ABOUT -->
+    <div class="case-section" id="about">
+      <h2>About the Project</h2>
+      <p>MOTD is an AI service that recommends travel routes for people using personal mobility devices. Developed at the D.REAM Academy HCI Lab at Yonsei University under the 2019 theme of <strong>'Connected AI'</strong>, the project explores how AI can personalize urban navigation by understanding each user's emotions, character, and personality.</p>
+      <p>Through accumulated user data, the AI suggests different types of routes — not just the fastest path, but one that suits how the user is feeling that day. For example: a Manhattan worker on a Friday evening who wants to chill out after work can input keywords like "chill," and AI provides several route options tailored to that mood.</p>
+
+      <figure class="case-img">
+        <img src="assets/motd/overview-01.png" alt="MOTD overview — project introduction">
+        <figcaption>MOTD — Project Overview</figcaption>
+      </figure>
+
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="stat-num">AI</div><div class="stat-label">Personalized Route Recommendation</div></div>
+        <div class="stat-cell"><div class="stat-num">4</div><div class="stat-label">Route Types</div></div>
+        <div class="stat-cell"><div class="stat-num">🛴</div><div class="stat-label">Personal Mobility Focused</div></div>
+        <div class="stat-cell"><div class="stat-num">2019</div><div class="stat-label">Connected AI Theme</div></div>
+      </div>
+
+      <div class="finding-box">
+        <strong>Problem Statement</strong>
+        <p>There are many applications that rent and share personal mobility devices. However, since there are no services providing tailored routes for personal mobility users in South Korea, our team designed and prototyped MOTD to fill that gap.</p>
+      </div>
+
+      <figure class="case-img">
+        <img src="assets/motd/overview-02.png" alt="MOTD — service concept overview">
+        <figcaption>MOTD Service Concept — AI considers emotions, character, and personality to suggest routes</figcaption>
+      </figure>
+    </div>
+
+    <!-- LOGO -->
+    <div class="case-section" id="logo">
+      <h2>Logo & Branding</h2>
+      <p class="phase-label">01 · Logo</p>
+      <p>I named this service <strong>Mobility of the Day (MOTD)</strong> and designed the logo. The name reflects the core idea: just as "Meal of the Day" is a curated daily choice, MOTD is a curated daily mobility experience — unique to each user, each day.</p>
+
+      <figure class="case-img">
+        <img src="assets/motd/logo.png" alt="MOTD logo">
+        <figcaption>MOTD — Mobility of the Day · Logo Design</figcaption>
+      </figure>
+
+      <div class="finding-box">
+        <strong>Mission</strong>
+        <p>MOTD aims to promote the use of personal mobility devices — reducing gas consumption and contributing to a healthier urban environment. The branding reflects this eco-conscious, forward-looking identity.</p>
+      </div>
+    </div>
+
+    <!-- AI NAVIGATION -->
+    <div class="case-section" id="ai-navigation">
+      <h2>AI-Based Social Networking & Navigation</h2>
+      <p class="phase-label">02 · AI Navigation</p>
+      <p>This mobile application aims to provide navigation services for personal mobility devices such as electronic kickboards and Segways. Beyond navigation, MOTD also functions as a social platform — users can discover other people's routes, give likes to posts, and share their own paths, similar to Instagram or Facebook.</p>
+      <p>When a person enters a starting point and ending point, the AI provides various travel routes based on accumulated user data. The AI considers each user's emotions, character, and personality to suggest the most appropriate routes.</p>
+
+      <figure class="case-img">
+        <img src="assets/motd/ai-navigation.png" alt="AI-based social networking and navigation">
+        <figcaption>AI-Based Social Networking & Navigation — route recommendation interface</figcaption>
+      </figure>
+    </div>
+
+    <!-- ROUTES -->
+    <div class="case-section" id="routes">
+      <h2>Routes</h2>
+      <p class="phase-label">03 · Routes</p>
+      <p>There are various types of routes that AI recommends to users based on their mood and preferences:</p>
+
+      <ul>
+        <li><strong>Normal Route</strong> — A simple, straightforward path that people normally use.</li>
+        <li><strong>Chillax Route</strong> — Contains nearby lakes, parks, or rivers along the recommended path for a relaxing journey.</li>
+        <li><strong>Short-cut Route</strong> — The shortest way to reach the destination efficiently.</li>
+        <li><strong>Active Route</strong> — Usually for people who enjoy long-distance rides, typically taking more than 50 minutes.</li>
+      </ul>
+
+      <figure class="case-img">
+        <img src="assets/motd/routes.png" alt="MOTD route types">
+        <figcaption>Four Route Types — Normal · Chillax · Short-cut · Active</figcaption>
+      </figure>
+    </div>
+
+    <!-- HOW TO USE -->
+    <div class="case-section" id="how-to-use">
+      <h2>How to Use</h2>
+      <p class="phase-label">04 · How to Use</p>
+
+      <ol>
+        <li>Set up the starting point and ending point.</li>
+        <li>Choose which personal mobility device to ride.</li>
+        <li>Check the routes that AI recommended.</li>
+        <li>Select one route and use it.</li>
+        <li>Upload the path that you used if you want to share it.</li>
+      </ol>
+
+      <figure class="case-img">
+        <img src="assets/motd/how-to-use.png" alt="How to use MOTD — step by step">
+        <figcaption>How to Use MOTD — 5-step user flow</figcaption>
+      </figure>
+    </div>
+
+    <!-- SHARE YOUR ROUTE -->
+    <div class="case-section" id="share">
+      <h2>Share Your Route</h2>
+      <p class="phase-label">05 · Invite & Share</p>
+
+      <h3>Invite Friends</h3>
+      <p>While using a route, you can share it with friends directly within the app. The path will be sent to your friend, making the journey more fun and social.</p>
+
+      <figure class="case-img">
+        <img src="assets/motd/invite.png" alt="Invite friends feature">
+        <figcaption>Invite Friends — share your live route with friends</figcaption>
+      </figure>
+
+      <h3>Share Your Route</h3>
+      <p>After completing a route that AI recommended, you can share it as a post on the application. Other users will see your posts, and if they aim to go to the same destination, they can use your route. In this way, AI technology builds a connection among users — transforming individual navigation into a shared urban experience.</p>
+
+      <figure class="case-img">
+        <img src="assets/motd/share.png" alt="Share your route — social feed">
+        <figcaption>Share Your Route — community-driven route discovery</figcaption>
+      </figure>
+
+      <div class="finding-box">
+        <strong>Design Insight</strong>
+        <p>By combining AI personalization with social sharing, MOTD creates a feedback loop: the more users share their routes, the smarter the AI becomes — and the more connected the personal mobility community grows.</p>
+      </div>
+    </div>
+
+    <!-- VIDEO -->
+    <div class="case-section" id="video">
+      <h2>Video</h2>
+
+      <h3>Tutorial</h3>
+      <div class="yt-facade" id="ytTutorial">
+        <img src="https://img.youtube.com/vi/8rD4dIznXoQ/maxresdefault.jpg" alt="MOTD Tutorial">
+        <div class="yt-facade-overlay">
+          <div class="yt-play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <iframe id="ytIframe1" data-src="https://www.youtube.com/embed/8rD4dIznXoQ?autoplay=1" title="MOTD Tutorial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+
+      <h3>Advertisement</h3>
+      <div class="yt-facade" id="ytAd">
+        <img src="https://img.youtube.com/vi/EBHJzBXsbfw/maxresdefault.jpg" alt="MOTD Advertisement">
+        <div class="yt-facade-overlay">
+          <div class="yt-play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <iframe id="ytIframe2" data-src="https://www.youtube.com/embed/EBHJzBXsbfw?autoplay=1" title="MOTD Advertisement" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+
+      <script>
+        document.getElementById('ytTutorial').addEventListener('click', function() {
+          var iframe = document.getElementById('ytIframe1');
+          iframe.src = iframe.dataset.src;
+          this.classList.add('playing');
+        });
+        document.getElementById('ytAd').addEventListener('click', function() {
+          var iframe = document.getElementById('ytIframe2');
+          iframe.src = iframe.dataset.src;
+          this.classList.add('playing');
+        });
+      </script>
+    </div>
+
+  </div>
+
+  <div class="next-project">
+    <div>
+      <p class="next-label">Next Project</p>
+      <a href="project-mapit.html" class="next-title">Map It! — Family Location Tracking Puzzle →</a>
+    </div>
+  </div>
+  
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-sign">Let's make connection.</p>
+    <div class="footer-links">
+      <a href="mailto:yjk5202@psu.edu">Email</a>
+      <a href="https://linkedin.com/in/yeeun--kim" target="_blank">LinkedIn</a>
+      <a href="index.html">Work</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank">Resume</a>
+    </div>
+    <p class="footer-copy">© 2026 Yeeun Kim</p>
+  </footer>
+
+  <script>
+    const toc = document.getElementById('caseToc');
+    const hero = document.querySelector('.case-hero');
+    if (toc && hero) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          toc.classList.toggle('toc-visible', !entry.isIntersecting);
+        });
+      }, { threshold: 0 });
+      observer.observe(hero);
+    }
+  </script>
+</body>
+</html>

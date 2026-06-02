@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADAS Driver Training — Yeeun Kim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0F172A; --rust: #1E54B7; --rust-light: #DBEAFE;
+      --rust-mid: #5B8DEF; --stone: #E8EFFC; --mist: #94A3B8;
+      --paper: #FFFFFF; --white: #F8FAFF;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; font-weight: 300; }
+    nav { position: sticky; top: 0; z-index: 100; padding: 1.1rem 4rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--stone); }
+    .nav-logo {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.1rem;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .nav-logo span { font-style: normal; color: var(--blue); }
+    .nav-back { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); text-decoration: none; transition: opacity 0.2s; }
+    .nav-back:hover { opacity: 0.6; }
+    .case-hero { padding: 5rem 4rem 4rem; max-width: 960px; margin: 0 auto; }
+    .case-tag { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rust); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--rust); }
+    .case-title { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 200; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 2.5rem; }
+    .case-title em { font-style: italic; color: var(--rust); }
+    .case-meta { display: flex; gap: 0; flex-wrap: wrap; border-top: 1px solid var(--stone); border-bottom: 1px solid var(--stone); }
+    .meta-item { padding: 1.25rem 2rem 1.25rem 0; margin-right: 2rem; border-right: 1px solid var(--stone); }
+    .meta-item:last-child { border-right: none; }
+    .meta-item label { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.35rem; }
+    .meta-item span { font-size: 0.88rem; font-weight: 500; color: var(--ink); }
+    .case-cover { width: 100%; aspect-ratio: 16/7; background: var(--stone); border: 2px dashed var(--rust-light); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; color: var(--mist); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; margin: 3rem 0 0; border-radius: 4px; overflow: hidden; }
+    .case-cover svg { width: 32px; height: 32px; opacity: 0.3; stroke: var(--mist); fill: none; stroke-width: 1.5; }
+    .case-body { max-width: 960px; margin: 0 auto; padding: 4rem 4rem 8rem; display: grid; grid-template-columns: 200px 1fr; gap: 0 4rem; align-items: start; }
+    .case-toc { position: sticky; top: 5rem; }
+    .toc-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 1rem; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toc-list a { font-size: 0.82rem; color: var(--mist); text-decoration: none; display: block; padding: 0.2rem 0 0.2rem 0.75rem; border-left: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+    .toc-list a:hover { color: var(--rust); border-left-color: var(--rust); }
+    .case-content { min-width: 0; }
+    .case-section { margin-bottom: 4rem; scroll-margin-top: 6rem; }
+    .case-section h2 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 300; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--stone); }
+    .case-section p { font-size: 0.95rem; line-height: 1.9; color: #475569; margin-bottom: 1rem; }
+    .case-section ul { margin: 1rem 0 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .case-section ul li { font-size: 0.92rem; line-height: 1.75; color: #475569; }
+    .case-img { width: 100%; aspect-ratio: 16/9; background: var(--stone); border: 2px dashed var(--rust-light); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); margin: 1.75rem 0; border-radius: 4px; }
+    .finding-box { background: var(--rust-light); border-left: 3px solid var(--rust); padding: 1.25rem 1.5rem; margin: 1.75rem 0; border-radius: 0 6px 6px 0; }
+    .finding-box strong { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rust); margin-bottom: 0.5rem; }
+    .finding-box p { font-size: 0.92rem; line-height: 1.75; color: var(--ink) !important; margin: 0 !important; }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--stone); border: 1px solid var(--stone); border-radius: 6px; overflow: hidden; margin: 1.75rem 0; }
+    .stat-cell { background: var(--white); padding: 1.5rem; text-align: center; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 200; color: var(--rust); line-height: 1; margin-bottom: 0.4rem; }
+    .stat-label { font-size: 0.72rem; color: var(--mist); letter-spacing: 0.06em; }
+    .next-project { border-top: 1px solid var(--stone); padding: 3rem 4rem; max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .next-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.5rem; }
+    .next-title { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: color 0.2s; }
+    .next-title:hover { color: var(--rust); }
+    @media (max-width: 760px) {
+      nav { padding: 1rem 1.5rem; } .case-hero { padding: 3rem 1.5rem 2rem; }
+      .case-body { grid-template-columns: 1fr; padding: 2rem 1.5rem 5rem; }
+      .case-toc { display: none; } .next-project { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; }
+      .stat-grid { grid-template-columns: 1fr; } .meta-item { padding: 1rem 1rem 1rem 0; margin-right: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <a href="index.html#research" class="nav-back">← Back to Portfolio</a>
+  </nav>
+
+  <div class="case-hero">
+    <p class="case-tag">Sponsored Research · AAA Foundation for Traffic Safety</p>
+    <h1 class="case-title">
+      Driver Training in Advanced<br><em>Driver Assistance Systems</em>
+    </h1>
+    <div class="case-meta">
+      <div class="meta-item">
+        <label>Role</label>
+        <span>Lead Researcher</span>
+      </div>
+      <div class="meta-item">
+        <label>Sponsor</label>
+        <span>AAA Foundation for Traffic Safety</span>
+      </div>
+      <div class="meta-item">
+        <label>Sample Size</label>
+        <span>N = 120</span>
+      </div>
+      <div class="meta-item">
+        <label>Methods</label>
+        <span>Simulator · Eye Tracking · Survey</span>
+      </div>
+      <div class="meta-item">
+        <label>Domain</label>
+        <span>SAE Level 1 / 2 ADAS</span>
+      </div>
+    </div>
+    <!-- ══ REPLACE: add cover image here ══ -->
+    <div class="case-cover">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Add cover image here
+    </div>
+  </div>
+
+  <div class="case-body">
+    <aside class="case-toc">
+      <p class="toc-label">Contents</p>
+      <ul class="toc-list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#methodology">Methodology</a></li>
+        <li><a href="#measures">Measures</a></li>
+        <li><a href="#findings">Key Findings</a></li>
+        <li><a href="#recommendations">Recommendations</a></li>
+        <li><a href="#publications">Publications</a></li>
+      </ul>
+    </aside>
+
+    <main class="case-content">
+
+      <div class="case-section" id="overview">
+        <h2>Overview</h2>
+        <p>Advanced Driver Assistance Systems (ADAS) — including adaptive cruise control, lane-keeping assist, and automatic emergency braking — are rapidly becoming standard in modern vehicles. Yet drivers frequently misuse or over-rely on these systems due to poor mental models of their capabilities and limitations.</p>
+        <p>Sponsored by the AAA Foundation for Traffic Safety, this study investigated how different driver training interventions affect mental model accuracy, trust calibration, decision-making, and real-world driving performance with SAE Level 1 and Level 2 ADAS.</p>
+
+        <div class="stat-grid">
+          <div class="stat-cell">
+            <div class="stat-num">120</div>
+            <div class="stat-label">Participants</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">2</div>
+            <div class="stat-label">Publications</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">Mixed</div>
+            <div class="stat-label">Methods</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-section" id="problem">
+        <h2>Problem</h2>
+        <p>ADAS misuse is a leading contributor to technology-related crashes. Drivers who over-trust automation disengage from the driving task; those who under-trust it fail to use safety features that could protect them. Both failure modes stem from inaccurate mental models — and both are preventable with effective training.</p>
+        <ul>
+          <li>What types of training content most effectively improve mental model accuracy for ADAS?</li>
+          <li>Do training improvements transfer to real-world decision-making and driving performance?</li>
+          <li>How does training affect trust calibration — reducing both over-trust and under-trust?</li>
+        </ul>
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add problem framing image or ADAS context diagram here</div>
+      </div>
+
+      <div class="case-section" id="methodology">
+        <h2>Methodology</h2>
+        <p>A mixed-methods behavioral study was designed to capture the full picture of driver-ADAS interaction across cognitive, attentional, and behavioral dimensions. Three data collection modalities were integrated:</p>
+        <ul>
+          <li><strong>Driving simulator experimentation</strong> — standardized ADAS scenarios enabling controlled measurement of driving performance and decision-making</li>
+          <li><strong>Eye tracking data capture</strong> — continuous gaze recording to assess attentional allocation and monitoring behavior during ADAS-assisted driving</li>
+          <li><strong>Survey-based observation</strong> — validated scales measuring mental model accuracy, trust, and perceived usability before and after training</li>
+        </ul>
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add study design overview or simulator setup image here</div>
+        <div class="case-img">Add eye tracking setup or data visualization here</div>
+      </div>
+
+      <div class="case-section" id="measures">
+        <h2>Measures</h2>
+        <p>Four primary outcomes were measured to evaluate the effect of training interventions:</p>
+        <ul>
+          <li><strong>Mental model accuracy</strong> — knowledge test assessing understanding of ADAS capabilities, limitations, and appropriate use cases</li>
+          <li><strong>Trust calibration</strong> — validated automation trust scale measuring alignment between driver trust and actual system reliability</li>
+          <li><strong>Decision-making</strong> — scenario-based judgment tasks evaluating appropriate ADAS engagement and disengagement decisions</li>
+          <li><strong>Driving performance</strong> — simulator metrics including lane deviation, reaction time, and safety-critical event response</li>
+        </ul>
+        <div class="finding-box">
+          <strong>Methodological Strength</strong>
+          <p>The combination of simulator performance data, eye tracking, and self-report measures enabled triangulation across behavioral, attentional, and cognitive dimensions — providing a more complete picture of training effects than any single method alone.</p>
+        </div>
+      </div>
+
+      <div class="case-section" id="findings">
+        <h2>Key Findings</h2>
+        <p>Specific training interventions significantly improved mental model accuracy, decision-making quality, and driving performance with ADAS. Training effects were measurable and consistent across all four outcome dimensions.</p>
+
+        <div class="finding-box">
+          <strong>Key Result</strong>
+          <p>Training content that explicitly addressed ADAS limitations — not just capabilities — produced the greatest improvements in both mental model accuracy and trust calibration, reducing both over-reliance and under-use of ADAS features.</p>
+        </div>
+
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add results charts — mental model accuracy comparison here</div>
+        <div class="case-img">Add driving performance or eye tracking results here</div>
+      </div>
+
+      <div class="case-section" id="recommendations">
+        <h2>Recommendations</h2>
+        <p>Strategic recommendations were synthesized and delivered to AAA Foundation stakeholders for integration into driver education programs:</p>
+        <ul>
+          <li>Include explicit instruction on ADAS limitations and failure modes — not just features and benefits</li>
+          <li>Use scenario-based decision tasks during training to build appropriate trust calibration</li>
+          <li>Incorporate hands-on simulator practice alongside conceptual instruction for maximum transfer</li>
+          <li>Target monitoring behavior explicitly — training drivers to maintain appropriate visual attention even during ADAS-assisted driving</li>
+          <li>Tailor training depth to driver experience level and prior ADAS exposure</li>
+        </ul>
+      </div>
+
+      <div class="case-section" id="publications">
+        <h2>Publications</h2>
+        <ul>
+          <li>
+            Kim, R. Y., &amp; Zhang, Y. (2026, Accepted). <em>Enhancing ADAS Training: Examining the Effects of Training Styles and Modes on Driver Knowledge and Decision-Making.</em> Human Factors and Ergonomics Society (HFES) Annual Meeting.
+          </li>
+          <li>
+            Kim, R. Y., &amp; Zhang, Y. (2026). <em>Training Drivers in Advanced Driver Assistance Systems: How Training Content Shapes Driver Knowledge, Decision-Making, and Performance.</em> Transportation Research Record.
+          </li>
+          <li>
+            Zhang, Y., Kim, R., &amp; Brennan, S. (2025). <em>Effects of Training Content and Approach on Drivers' Understanding of and Performance with Advanced Driver Assistance Systems.</em> AAA Foundation for Traffic Safety Technical Report.
+          </li>
+        </ul>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="next-project">
+    <div>
+      <p class="next-label">Next Project</p>
+      <a href="project-gm-hud.html" class="next-title">Driver Comprehension of HUD Warning Interfaces →</a>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cabby — Yeeun Kim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0F172A; --blue: #1E54B7; --blue-light: #DBEAFE;
+      --stone: #E8EFFC; --mist: #94A3B8; --paper: #FFFFFF; --white: #F8FAFF;
+      --cabby-dark: #0B1B3A; --cabby-teal: #00D4C8; --ff-display: 'Fraunces', Georgia, serif;
+      --ff-body:'Instrument Sans', sans-serif;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; font-weight: 300; }
+    a { color: inherit; text-decoration: none; }
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; padding: 1.1rem 4rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--stone); }
+    /* CSS */
+    .nav-logo {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.1rem;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .nav-logo span { font-style: normal; color: var(--blue); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; text-decoration: none; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-resume { color: var(--blue) !important; border: 1px solid var(--stone); padding: 0.35rem 1rem; border-radius: 100px; transition: background 0.2s, color 0.2s !important; }
+    .nav-resume:hover { background: var(--blue); color: white !important; }
+
+    /* HERO */
+    .case-hero { background: var(--cabby-dark); padding: 1rem 4rem 0; position: relative; overflow: hidden; }
+    .case-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 50%, rgba(0,212,200,0.08) 0%, transparent 60%); pointer-events: none; }
+    .hero-inner { max-width: 960px; margin: 0 auto; position: relative; }
+    .case-tag { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cabby-teal); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--cabby-teal); }
+    .case-title { font-family: 'Fraunces', serif; font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 200; line-height: 1.0; letter-spacing: -0.03em; color: #fff; margin-bottom: 0.75rem; }
+    .case-subtitle { font-size: 1.05rem; font-weight: 300; color: rgba(255,255,255,0.45); margin-bottom: 2rem; }
+    .hero-cover { width: 100%; margin-top: 2rem; border-radius: 8px 8px 0 0; overflow: hidden; }
+    .hero-cover img { width: 100%; display: block; }
+
+    /* META */
+    .case-meta { background: var(--white); border-bottom: 1px solid var(--stone); padding: 0 4rem; }
+    .case-meta-inner { max-width: 1300px; margin: 0 auto; display: flex; flex-wrap: wrap; }
+    .meta-item { padding: 1.5rem 2.5rem 1.5rem 0; margin-right: 2.5rem; border-right: 1px solid var(--stone); }
+    .meta-item:last-child { border-right: none; }
+    .meta-item label { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.35rem; }
+    .meta-item span { font-size: 0.88rem; font-weight: 500; color: var(--ink); }
+
+    /* BODY — single column, wide images naturally */
+    .case-body {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 4rem 3rem 8rem;
+      position: relative;
+    }
+
+    /* TOC — fixed on very wide screens only */
+    .case-toc {
+      display: none;
+    }
+    @media (min-width: 1280px) {
+      .case-toc {
+        display: block;
+        position: fixed;
+        top: 6rem;
+        left: max(1.5rem, calc(50% - 780px));
+        width: 160px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+      }
+      .case-toc.toc-visible {
+        opacity: 1;
+        pointer-events: all;
+      }
+    }
+
+    .toc-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 1rem; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .toc-list a { font-size: 0.78rem; color: var(--mist); text-decoration: none; display: block; padding: 0.2rem 0 0.2rem 0.75rem; border-left: 2px solid transparent; transition: color 0.2s, border-color 0.2s; line-height: 1.4; }
+    .toc-list a:hover { color: var(--blue); border-left-color: var(--blue); }
+
+    .case-content { min-width: 0; }
+    .case-section { margin-bottom: 5rem; scroll-margin-top: 6rem; }
+    .case-section h2 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 300; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--stone); }
+    .case-section h3 { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 400; color: var(--cabby-dark); margin: 2rem 0 0.75rem; }
+    .case-section p { font-size: 0.95rem; line-height: 1.9; color: #475569; margin-bottom: 1rem; }
+    .case-section ul { margin: 0.75rem 0 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.45rem; }
+    .case-section ul li { font-size: 0.92rem; line-height: 1.75; color: #475569; }
+
+    /* IMAGES — full width of content column, no tricks needed */
+    figure.case-img {
+      width: 100%;
+      border-radius: 8px; overflow: hidden;
+      margin: 1.75rem 0;
+      border: 1px solid var(--stone);
+    }
+    figure.case-img img { width: 100%; display: block; }
+    figure.case-img figcaption { font-size: 0.7rem; color: var(--mist); letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; background: var(--white); border-top: 1px solid var(--stone); }
+
+    .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.75rem 0; }
+    .img-grid-2 figure { border-radius: 8px; overflow: hidden; border: 1px solid var(--stone); }
+    .img-grid-2 img { width: 100%; display: block; }
+    .img-grid-2 figcaption { font-size: 0.68rem; color: var(--mist); letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 0.75rem; background: var(--white); border-top: 1px solid var(--stone); }
+
+    .img-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1.75rem 0; }
+    .img-grid-3 figure { border-radius: 8px; overflow: hidden; border: 1px solid var(--stone); }
+    .img-grid-3 img { width: 100%; display: block; }
+    .img-grid-3 figcaption { font-size: 0.65rem; color: var(--mist); letter-spacing: 0.08em; text-transform: uppercase; padding: 0.4rem 0.6rem; background: var(--white); border-top: 1px solid var(--stone); }
+
+    /* INSIGHT BOX */
+    .finding-box { background: var(--blue-light); border-left: 3px solid var(--blue); padding: 1.25rem 1.5rem; margin: 1.75rem 0; border-radius: 0 6px 6px 0; }
+    .finding-box strong { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue); margin-bottom: 0.5rem; }
+    .finding-box p { font-size: 0.92rem; line-height: 1.75; color: var(--ink) !important; margin: 0 !important; }
+
+    /* QUOTE */
+    .case-quote { border-left: 3px solid var(--cabby-teal); padding: 1.25rem 1.5rem; margin: 1.75rem 0; background: rgba(0,212,200,0.04); border-radius: 0 6px 6px 0; }
+    .case-quote p { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 300; font-style: italic; color: var(--cabby-dark) !important; margin: 0 !important; line-height: 1.6; }
+
+    /* STAT GRID */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--stone); border: 1px solid var(--stone); border-radius: 6px; overflow: hidden; margin: 1.75rem 0; }
+    .stat-cell { background: var(--white); padding: 1.25rem; text-align: center; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 200; color: var(--blue); line-height: 1; margin-bottom: 0.3rem; }
+    .stat-label { font-size: 0.68rem; color: var(--mist); letter-spacing: 0.05em; }
+
+    /* PHASE LABEL */
+   .phase-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #5B8DEF;background: #DBEAFE; display: inline-block; padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1.25rem; }
+
+    /* NEXT */
+    .next-project { border-top: 1px solid var(--stone); padding: 3rem 4rem; max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .next-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.5rem; }
+    .next-title { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: color 0.2s; }
+    .next-title:hover { color: var(--blue); }
+
+    /* ── FOOTER ── */
+    footer { padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem); border-top: 1px solid var(--stone); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .footer-sign { font-family: var(--ff-display); font-size: 0.95rem; font-weight: 300; font-style: italic; color: var(--mist); }
+    .footer-links { display: flex; gap: 1.75rem; }
+    .footer-links a { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-copy { font-size: 0.72rem; color: var(--mist); }
+
+    /* RESPONSIVE */
+    @media (max-width: 760px) {
+      nav { padding: 1rem 1.5rem; }
+      .case-hero { padding: 4rem 1.5rem 0; }
+      .case-meta { padding: 0 1.5rem; }
+      .case-body { padding: 2rem 1.5rem 5rem; }
+      .next-project { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; }
+      .stat-grid { grid-template-columns: repeat(2,1fr); }
+      .img-grid-2, .img-grid-3 { grid-template-columns: 1fr; }
+      .meta-item { padding: 1rem 1rem 1rem 0; margin-right: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <div class="nav-links">
+      <a href="index.html">Work</a>
+      <a href="about.html">About</a>
+      <a href="publications.html">Publications</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank" class="nav-resume">Resume</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="case-hero">
+    <div class="hero-inner">
+      <p class="case-tag">UX Design & Research · University of Michigan</p>
+      <h1 class="case-title">Cabby</h1>
+      <p class="case-subtitle">Full passenger experience across mobile app, interface design, and exterior LED design for a self-driving taxi.</p>
+      <div class="hero-cover">
+        <img src="assets/cabby/internal-display.jpg" alt="Cabby — Self-Driving Taxi UX">
+      </div>
+    </div>
+  </div>
+
+  <!-- META -->
+  <div class="case-meta">
+    <div class="case-meta-inner">
+      <div class="meta-item"><label>Role</label><span>UX Researcher & Designer</span></div>
+      <div class="meta-item"><label>Touchpoints</label><span>Mobile Interface · Human-Machine Interface Design · Exterior LED Design</span></div>
+      <div class="meta-item"><label>Year</label><span>2022</span></div>
+      <div class="meta-item"><label>Tools</label><span>Figma · Illustrator · User Research</span></div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="case-body">
+
+    <aside class="case-toc">
+      <p class="toc-label">Contents</p>
+      <ul class="toc-list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#background">Background</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#concept">Concept & Ideation</a></li>
+        <li><a href="#userflow">User Flow</a></li>
+        <li><a href="#lofi">Lo-fi Prototype</a></li>
+        <li><a href="#usertesting">User Testing</a></li>
+        <li><a href="#wireframe">Wireframe</a></li>
+        <li><a href="#car-modelling">Car Modelling</a></li>
+        <li><a href="#hifi-mobile">Hi-fi · Mobile App</a></li>
+        <li><a href="#hifi-door">Hi-fi · Door Screen</a></li>
+        <li><a href="#hifi-led">Hi-fi · Exterior LED</a></li>
+        <li><a href="#hifi-internal">Hi-fi · Internal Display</a></li>
+        <li><a href="#reflection">Reflection</a></li>
+      </ul>
+    </aside>
+
+    <main class="case-content">
+
+      <!-- OVERVIEW -->
+      <div class="case-section" id="overview">
+        <h2>Overview</h2>
+        <p>Cabby is a comprehensive UX design system for self-driving taxis — designing the full passenger experience across three distinct touchpoints: a mobile booking app, an in-car interactive display, and an exterior LED communication panel for pedestrians.</p>
+        <p>As autonomous vehicles transition from novelty to daily infrastructure, riders face a fundamental new challenge: trusting and interacting with a vehicle that has no driver. Cabby was designed to bridge that trust gap through clear information architecture, proactive communication, and personalized ride experiences.</p>
+        <div class="stat-grid">
+          <div class="stat-cell"><div class="stat-num">3</div><div class="stat-label">Touchpoints Designed</div></div>
+          <div class="stat-cell"><div class="stat-num">5</div><div class="stat-label">User Journey Stages</div></div>
+          <div class="stat-cell"><div class="stat-num">Lo→Hi</div><div class="stat-label">Full Prototype Range</div></div>
+          <div class="stat-cell"><div class="stat-num">2022</div><div class="stat-label">Year</div></div>
+        </div>
+      </div>
+
+      <!-- BACKGROUND -->
+      <div class="case-section" id="background">
+        <h2>Background</h2>
+        <p class="phase-label">01 · Background</p>
+        <p>The shift from human-driven to driverless taxis represents a fundamental paradigm change — not just in technology, but in how people communicate with their transportation.</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/paradigm.jpg" alt="Drivers → Driverless paradigm shift">
+          <figcaption>Paradigm shift — from driver-dependent to fully autonomous transportation</figcaption>
+        </figure>
+
+        <p>In traditional taxis, passengers rely on gesture, voice, and eye contact with the driver to communicate needs, signal discomfort, or request changes. Without a driver, none of these channels exist.</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/communication.jpg" alt="Communication problems in self-driving taxis">
+          <figcaption>Communication gap — existing channels disappear in a driverless context</figcaption>
+        </figure>
+
+        <div class="case-quote">
+          <p>"An IoT device that helps self-driving taxis communicate with pedestrians and passengers inside and outside."</p>
+        </div>
+      </div>
+
+      <!-- RESEARCH -->
+      <div class="case-section" id="research">
+        <h2>Research</h2>
+        <p class="phase-label">02 · Needfinding</p>
+        <p>Through needfinding interviews and card sorting, five key situations were identified where passengers most need to communicate with a self-driving taxi:</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/situations.jpg" alt="5 communication situations identified through research">
+          <figcaption>Needfinding — 5 situations requiring communication with a self-driving taxi</figcaption>
+        </figure>
+
+        <p>Research insights were mapped directly to design solutions across three output areas:</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/insights.jpg" alt="Insights mapped to solutions">
+          <figcaption>Needs finding — 3 key insights mapped to design solutions</figcaption>
+        </figure>
+      </div>
+
+      <!-- CONCEPT -->
+      <div class="case-section" id="concept">
+        <h2>Concept & Ideation</h2>
+        <p class="phase-label">03 · Ideation</p>
+        <p>Three core product areas were defined based on research findings, each addressing a different layer of the passenger-vehicle relationship:</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/key-features.jpg" alt="Key features across 3 touchpoints">
+          <figcaption>Ideation — key features defined across Mobile App, Internal Display, and External Display</figcaption>
+        </figure>
+
+        <div class="finding-box">
+          <strong>Design Principle</strong>
+          <p>Every feature was tied back to a specific communication need — information, customization, or safety — identified in the needfinding phase. No feature was added for novelty alone.</p>
+        </div>
+      </div>
+
+      <!-- USER FLOW -->
+      <div class="case-section" id="userflow">
+        <h2>User Flow</h2>
+        <p class="phase-label">04 · User Flow</p>
+        <p>Five end-to-end journey stages were mapped across all three touchpoints, covering the complete passenger experience from booking through post-ride rating.</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/userflow.jpg" alt="Complete Cabby user flow diagram">
+          <figcaption>User flow — 5 journey stages across Mobile App, Internal Display, and External Display</figcaption>
+        </figure>
+      </div>
+
+      <!-- LO-FI -->
+      <div class="case-section" id="lofi">
+        <h2>Lo-fi Prototype</h2>
+        <p class="phase-label">05 · Lo-fi</p>
+        <p>Paper prototyping sessions allowed the team to rapidly explore interaction patterns and layout concepts before committing to digital wireframes. Handwritten screens were used to test core flows and identify ambiguities early.</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/lofi.jpg" alt="Paper prototyping session">
+          <figcaption>Paper prototyping — rapid ideation across multiple layout and interaction concepts</figcaption>
+        </figure>
+
+        <p>Lo-fi digital wireframes followed for both the mobile app and the in-car systems, covering all screens across the 5 journey stages.</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/app-lofi.jpg" alt="App lo-fi wireframes — all screens">
+          <figcaption>App lo-fi — all screens across booking, finding, onboarding, ride, and drop-off flows</figcaption>
+        </figure>
+
+        <figure class="case-img">
+          <img src="assets/cabby/internal-lofi.jpg" alt="Internal and external display lo-fi wireframes">
+          <figcaption>Internal & external display lo-fi — dashboard, emergency stop, voice assistant, pedestrian detection, external LED</figcaption>
+        </figure>
+      </div>
+
+      <!-- USER TESTING -->
+      <div class="case-section" id="usertesting">
+        <h2>User Testing</h2>
+        <p class="phase-label">06 · User Testing</p>
+        <p>User testing sessions were conducted with participants interacting with the lo-fi prototypes to evaluate comprehension, navigation clarity, and the intuitiveness of key interaction patterns — particularly around the unlock flow and emergency stop.</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/user-testing.jpg" alt="User testing session photos">
+          <figcaption>User testing — participants navigating lo-fi prototypes at the University of Michigan library</figcaption>
+        </figure>
+
+        <div class="finding-box">
+          <strong>Key Finding from Testing</strong>
+          <p>Users consistently struggled to locate their Cabby upon arrival — particularly in crowded pickup areas. This led directly to the custom ID system and AR navigation feature in the hi-fi design.</p>
+        </div>
+      </div>
+
+      <!-- WIREFRAME -->
+      <div class="case-section" id="wireframe">
+        <h2>Wireframe</h2>
+        <p class="phase-label">07 · Wireframe</p>
+        <p>Mid-fidelity wireframes were developed in Figma for both the mobile app and the in-car display systems, incorporating user testing feedback and refining the information hierarchy.</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/app-wireframe.jpg" alt="Full app wireframe — all screens">
+          <figcaption>App wireframe — complete screen set across all 5 journey stages</figcaption>
+        </figure>
+
+        <figure class="case-img">
+          <img src="assets/cabby/wireframe.jpg" alt="Internal display wireframes — 6 key screens">
+          <figcaption>Internal display wireframe — dashboard, voice assistant, emergency stop, pedestrian detection, rate experience, change destination</figcaption>
+        </figure>
+      </div>
+
+      <!-- CAR MODELLING -->
+      <div class="case-section" id="car-modelling">
+        <h2>Car Modelling</h2>
+        <p class="phase-label">08 · Car Modelling</p>
+        <p>To fully realize the Cabby experience — particularly the exterior LED display and door touch screen — the vehicle itself needed to be designed. A 3D car model was created from scratch, including technical blueprints across all views and a fully rendered 3D model.</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/car-modelling.jpg" alt="Cabby car modelling — blueprints and 3D model">
+          <figcaption>Car modelling — side view, front view, back view, top view, perspective wireframe, and 3D render</figcaption>
+        </figure>
+
+        <p>The vehicle concept includes detection displays on front and rear for pedestrian communication, a door-mounted touch screen for keyless unlock, a sunroof, and four sensor units on the roof. The exterior ID display was designed to be fully customizable by the passenger.</p>
+      </div>
+
+      <!-- HI-FI MOBILE -->
+      <div class="case-section" id="hifi-mobile">
+        <h2>Hi-fi Design · Mobile App</h2>
+        <p class="phase-label">09 · Hi-fi · Mobile</p>
+        <p>The high-fidelity mobile app applied the Cabby visual system — dark navy backgrounds, teal accents, and clean typography — to the complete booking and ride experience.</p>
+
+        <div class="img-grid-2">
+          <figure>
+            <img src="assets/cabby/mobile-id.jpg" alt="Mobile app — Cabby ID customization">
+            <figcaption>Edit Cabby's ID</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/cabby/mobile-arrival.jpg" alt="Mobile app — taxi arrival screen">
+            <figcaption>Cabby Arrival & Unlock</figcaption>
+          </figure>
+        </div>
+
+        <div class="img-grid-2">
+          <figure>
+            <img src="assets/cabby/mobile-unlock.jpg" alt="Mobile app — unlock flow">
+            <figcaption>Unlock Flow (app + door screen)</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/cabby/mobile-ride.jpg" alt="Mobile app — on-ride emergency stop">
+            <figcaption>On-Ride · Emergency Stop</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- HI-FI DOOR -->
+      <div class="case-section" id="hifi-door">
+        <h2>Hi-fi Design · Door Touch Screen</h2>
+        <p class="phase-label">10 · Hi-fi · Door Screen</p>
+        <p>The door-mounted touch screen provides a physical fallback for unlocking — offering passcode entry and security question recovery when the mobile app isn't available. The flow maps cleanly from enter → confirm → error → help → unlocked.</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/door-touchscreen.jpg" alt="Door touch screen unlock flow">
+          <figcaption>Door touch screen — full unlock flow: passcode entry, error state, help options, door unlocked confirmation</figcaption>
+        </figure>
+      </div>
+
+      <!-- HI-FI LED -->
+      <div class="case-section" id="hifi-led">
+        <h2>Hi-fi Design · Exterior LED Display</h2>
+        <p class="phase-label">11 · Hi-fi · Exterior LED</p>
+        <p>A core innovation of Cabby is the exterior LED communication system — addressing one of the most pressing unsolved problems in autonomous vehicle design: how does a driverless car communicate its intent to pedestrians?</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/led-detection.jpg" alt="Exterior LED — pedestrian detection system">
+          <figcaption>Detection system — vision sensors identify pedestrian movement; LED signals respond in real time</figcaption>
+        </figure>
+
+        <figure class="case-img">
+          <img src="assets/cabby/exterior.jpg" alt="Exterior LED display — PASS / STOP / ID">
+          <figcaption>Exterior LED hi-fi — three signal modes: PASS (safe to cross), STOP (wait), ID (passenger identification)</figcaption>
+        </figure>
+
+        <div class="finding-box">
+          <strong>Design Rationale</strong>
+          <p>The PASS / STOP / ID signal system was designed to be legible at a glance, without language dependency — ensuring the vehicle can communicate intent across languages, literacy levels, and visibility conditions.</p>
+        </div>
+      </div>
+
+      <!-- HI-FI INTERNAL -->
+      <div class="case-section" id="hifi-internal">
+        <h2>Hi-fi Design · Internal Display</h2>
+        <p class="phase-label">12 · Hi-fi · Internal Display</p>
+        <p>The in-car dashboard was designed as a rich ambient information layer — giving passengers a sense of control and situational awareness without requiring active interaction. Key screens include the main dashboard, voice assistant, emergency stop, and pedestrian detection overlay.</p>
+
+        <figure class="case-img">
+          <img src="assets/cabby/internal-display.jpg" alt="Internal display — full hi-fi dashboard and modal screens">
+          <figcaption>Internal display hi-fi — greeting screen, voice assistant, main dashboard (speed, map, ETA, music), emergency stop, pedestrian detection</figcaption>
+        </figure>
+
+        <p>The main dashboard surfaces:</p>
+        <ul>
+          <li>Real-time speed and speed limit</li>
+          <li>Live route map with current location and ETA</li>
+          <li>Music controls with Now Playing</li>
+          <li>Driving mode controls (Park / Drive / Reverse)</li>
+          <li>Ambient vehicle status — AC, lights, fan, temperature</li>
+          <li>Emergency stop request button (persistent, always accessible)</li>
+        </ul>
+      </div>
+
+      <!-- REFLECTION -->
+      <div class="case-section" id="reflection">
+        <h2>Reflection</h2>
+        <p>Cabby was one of my earliest end-to-end UX design projects, and it directly shaped the research questions I pursued throughout my PhD. Several lessons from this project became foundational to my later work:</p>
+        <ul>
+          <li><strong>Trust is a design material.</strong> Every touchpoint in Cabby — the LED signal, the voice assistant, the real-time dashboard — was ultimately a trust mechanism. This framing became central to my later human factors research on driver trust in ADAS and SAE Level 3 automation.</li>
+          <li><strong>Multi-touchpoint design requires system thinking.</strong> Mobile, in-car display, and exterior LED had to feel like one coherent product, not three parallel designs. Designing these surfaces together forced rigorous thinking about information hierarchy and handoff.</li>
+          <li><strong>Car modelling deepened the design.</strong> Building the 3D vehicle model wasn't decorative — it forced precise decisions about where sensors, displays, and access points would physically live, making the UX constraints real rather than abstract.</li>
+          <li><strong>Research and design reinforce each other.</strong> The needfinding phase made every design decision more defensible. And conversely, designing Cabby gave me intuitions about autonomous vehicle UX that later informed how I designed and analyzed my PhD research studies.</li>
+        </ul>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="next-project">
+    <div>
+      <p class="next-label">Next Project</p>
+      <a href="project-matnajang.html" class="next-title">Matnajang — A Platform Connecting Restaurants and Grocery Suppliers →</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-sign">Let's make connection.</p>
+    <div class="footer-links">
+      <a href="mailto:yjk5202@psu.edu">Email</a>
+      <a href="https://linkedin.com/in/yeeun--kim" target="_blank">LinkedIn</a>
+      <a href="index.html">Work</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank">Resume</a>
+    </div>
+    <p class="footer-copy">© 2026 Yeeun Kim</p>
+  </footer>
+  
+
+  <script>
+    const toc = document.querySelector('.case-toc');
+    const hero = document.querySelector('.case-hero');
+
+    if (toc && hero) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) {
+            toc.classList.add('toc-visible');
+          } else {
+            toc.classList.remove('toc-visible');
+          }
+        });
+      }, { threshold: 0 });
+
+      observer.observe(hero);
+    }
+  </script>
+</body>
+</html>

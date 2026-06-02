@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matnajang — Yeeun Kim</title>
+  <link rel="icon" type="image/png" href="yk-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink:          #0A1A12;
+      --paper:        #FFFFFF;
+      --white:        #F5FBF7;
+      --stone:        #DAF0E0;
+      --mist:         #94A3B8;
+      --warm:         #1A7A3D;
+      --warm-mid:     #2DA855;
+      --warm-light:   #D1F0DC;
+      --warm-pale:    #EEFAF1;
+      --warm-glow:    #A0E8B5;
+      --ff-display: 'Fraunces', Georgia, serif;
+      --ff-body:    'Instrument Sans', sans-serif;
+      --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--ff-body); background: var(--paper); color: var(--ink); line-height: 1.6; font-weight: 300; cursor: none; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── SCROLL PROGRESS ── */
+    #progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: var(--warm); z-index: 9999; transition: width 0.1s linear; }
+
+    /* ── CUSTOM CURSOR ── */
+    .cursor-dot, .cursor-ring { position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); }
+    .cursor-dot { width: 6px; height: 6px; background: var(--warm); top: 0; left: 0; }
+    .cursor-ring { width: 32px; height: 32px; border: 1.5px solid var(--warm); top: 0; left: 0; transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), background 0.3s; }
+    .cursor-ring.hover { width: 50px; height: 50px; background: rgba(26,122,61,0.08); }
+    @media (hover: none) { .cursor-dot, .cursor-ring { display: none; } body { cursor: auto; } }
+
+    /* ── NAV ── */
+    nav { position: sticky; top: 0; z-index: 100; padding: 1.1rem 4rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--stone); }
+    .nav-logo { font-family: var(--ff-display); font-size: 1.1rem; font-weight: 600; font-style: italic; letter-spacing: 0.02em; }
+    .nav-logo span { font-style: normal; color: var(--warm); font-weight: 600; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; text-decoration: none; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-resume { color: var(--warm) !important; border: 1px solid var(--stone); padding: 0.35rem 1rem; border-radius: 100px; transition: background 0.2s, color 0.2s !important; }
+    .nav-resume:hover { background: var(--warm); color: white !important; }
+
+    /* ── HERO ── */
+    .case-hero { background: var(--warm); padding: 4rem 4rem 0; position: relative; overflow: hidden; }
+    .case-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 75% 40%, rgba(245,201,160,0.2) 0%, transparent 65%); pointer-events: none; }
+    .hero-inner { max-width: 860px; margin: 0 auto; position: relative; }
+    .case-tag { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm-glow); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--warm-glow); }
+    .case-title { font-family: var(--ff-display); font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 200; line-height: 1.0; letter-spacing: -0.03em; color: #fff; margin-bottom: 0.6rem; }
+    .case-subtitle { font-size: 1rem; font-weight: 300; color: rgba(255,255,255,0.45); margin-bottom: 0.5rem; }
+    .hero-cover { width: 100%; margin-top: 2rem; border-radius: 8px 8px 0 0; overflow: hidden; }
+    .hero-cover img { width: 100%; height: 410px; display: block; object-fit: cover; object-position: top; }
+
+    /* ── META ── */
+    .case-meta { background: var(--warm-pale); border-bottom: 1px solid var(--warm-light); padding: 0 4rem; }
+    .case-meta-inner { max-width: 900px; margin: 0 auto; display: flex; flex-wrap: wrap; }
+    .meta-item { padding: 1.5rem 2.5rem 1.5rem 0; margin-right: 2.5rem; border-right: 1px solid var(--warm-light); }
+    .meta-item:last-child { border-right: none; }
+    .meta-item label { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--warm-mid); margin-bottom: 0.35rem; }
+    .meta-item span { font-size: 0.88rem; font-weight: 500; color: var(--ink); }
+
+    /* ── BODY ── */
+    .case-body { max-width: 1300px; margin: 0 auto; padding: 4rem 4rem 8rem; }
+
+    /* ── TOC ── */
+    .case-toc { display: none; }
+    @media (min-width: 1440px) {
+      .case-toc { display: block; position: fixed; top: 6rem; left: max(1.5rem, calc(50% - 780px)); width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+      .case-toc.toc-visible { opacity: 1; pointer-events: all; }
+    }
+    .toc-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 1rem; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .toc-list a { font-size: 0.78rem; color: var(--mist); text-decoration: none; display: block; padding: 0.2rem 0 0.2rem 0.75rem; border-left: 2px solid transparent; transition: color 0.2s, border-color 0.2s; line-height: 1.4; }
+    .toc-list a:hover { color: var(--warm); border-left-color: var(--warm); }
+
+    /* ── SECTIONS ── */
+    .case-section { margin-bottom: 5rem; scroll-margin-top: 6rem; }
+    .case-section h2 { font-family: var(--ff-display); font-size: 1.6rem; font-weight: 300; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--warm-light); }
+    .case-section h3 { font-family: var(--ff-display); font-size: 1.15rem; font-weight: 400; color: var(--warm); margin: 2rem 0 0.75rem; }
+    .case-section p { font-size: 0.95rem; line-height: 1.9; color: #475569; margin-bottom: 1rem; }
+
+    /* ── IMAGES ── */
+    figure.case-img { width: 100%; border-radius: 8px; overflow: hidden; margin: 1.75rem 0; border: 1px solid var(--warm-light); }
+    figure.case-img img { width: 100%; display: block; }
+    figure.case-img figcaption { font-size: 0.7rem; color: var(--mist); letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; background: var(--warm-pale); border-top: 1px solid var(--warm-light); }
+
+    .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.75rem 0; }
+    .img-grid-2 figure { border-radius: 8px; overflow: hidden; border: 1px solid var(--warm-light); margin: 0; }
+    .img-grid-2 img { width: 100%; display: block; }
+    .img-grid-2 figcaption { font-size: 0.68rem; color: var(--mist); letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 0.75rem; background: var(--warm-pale); border-top: 1px solid var(--warm-light); }
+
+    .img-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1.75rem 0; }
+    .img-grid-3 figure { border-radius: 8px; overflow: hidden; border: 1px solid var(--warm-light); margin: 0; }
+    .img-grid-3 img { width: 100%; display: block; }
+    .img-grid-3 figcaption { font-size: 0.65rem; color: var(--mist); letter-spacing: 0.08em; text-transform: uppercase; padding: 0.4rem 0.6rem; background: var(--warm-pale); border-top: 1px solid var(--warm-light); }
+
+    /* ── FINDING BOX ── */
+    .finding-box { background: var(--warm-light); border-left: 3px solid var(--warm); padding: 1.25rem 1.5rem; margin: 1.75rem 0; border-radius: 0 6px 6px 0; }
+    .finding-box strong { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--warm); margin-bottom: 0.5rem; }
+    .finding-box p { font-size: 0.92rem; line-height: 1.75; color: var(--ink) !important; margin: 0 !important; }
+
+    /* ── PHASE LABEL ── */
+    .phase-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); background: var(--warm-light); display: inline-block; padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1.25rem; }
+
+    /* ── NEXT PROJECT ── */
+    .next-project { border-top: 1px solid var(--warm-light); padding: 3rem 4rem; max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .next-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.5rem; }
+    .next-title { font-family: var(--ff-display); font-size: 1.2rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: color 0.2s; }
+    .next-title:hover { color: var(--warm); }
+
+    /* ── FOOTER ── */
+    footer { padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem); border-top: 1px solid var(--stone); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .footer-sign { font-family: var(--ff-display); font-size: 0.95rem; font-weight: 300; font-style: italic; color: var(--mist); }
+    .footer-links { display: flex; gap: 1.75rem; }
+    .footer-links a { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-copy { font-size: 0.72rem; color: var(--mist); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 760px) {
+      nav { padding: 1rem 1.5rem; }
+      .case-hero { padding: 4rem 1.5rem 0; }
+      .case-meta { padding: 0 1.5rem; }
+      .case-body { padding: 2rem 1.5rem 5rem; }
+      .next-project { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; }
+      .img-grid-2, .img-grid-3 { grid-template-columns: 1fr; }
+      .meta-item { padding: 1rem 1rem 1rem 0; margin-right: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <div class="nav-links">
+      <a href="index.html">Work</a>
+      <a href="about.html">About</a>
+      <a href="publications.html">Publications</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank" class="nav-resume">Resume</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="case-hero">
+    <div class="hero-inner">
+      <p class="case-tag">Service Design · Product Design</p>
+      <h1 class="case-title">Matnajang</h1>
+      <p class="case-subtitle">맛나장 — A Platform Connecting Restaurants and Grocery Suppliers</p>
+      <div class="hero-cover">
+        <img src="assets/matnajang/hero.png" alt="Matnajang — Service Design Project">
+      </div>
+    </div>
+  </div>
+
+  <!-- META -->
+  <div class="case-meta">
+    <div class="case-meta-inner">
+      <div class="meta-item"><label>Role</label><span>Branding · Prototyping · Graphic Design</span></div>
+      <div class="meta-item"><label>Course</label><span>Service Design</span></div>
+      <div class="meta-item"><label>Type</label><span>Mobile App Design· Platform Service Design</span></div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <aside class="case-toc" id="caseToc">
+    <p class="toc-label">Contents</p>
+    <ul class="toc-list">
+      <li><a href="#about">About</a></li>
+      <li><a href="#branding">Branding</a></li>
+      <li><a href="#service">Product Design</a></li>
+      <li><a href="#mobile">Mobile Prototype</a></li>
+      <li><a href="#tutorial video">Tutorial Video</a></li>
+    </ul>
+  </aside>
+
+  <div class="case-body">
+
+    <!-- ABOUT -->
+    <div class="case-section" id="about">
+      <h2>About the Project</h2>
+      <p>During the 'Service Design' course, I created <strong>Matnajang (맛나장)</strong> — a platform service that aims to enhance profit for both restaurants and grocery suppliers by connecting them directly through a mobile application.</p>
+      <p>The name "Matnajang" comes from the Korean phrase meaning "Let's Meet Together," reflecting the platform's core mission of bringing food industry stakeholders closer. I was responsible for branding, prototyping, and all graphic design work, as well as translating all content in the mobile application prototype.</p>
+
+      <figure class="case-img">
+        <img src="assets/matnajang/hero.png" alt="Matnajang overview">
+        <figcaption>Matnajang — Project Overview</figcaption>
+      </figure>
+
+      <div class="finding-box">
+        <strong>Naming</strong>
+        <p>Matnajang = 맛나장 (Korean). The name means "Let's Meet Together" — a mobile application prototype designed to enhance profit for both restaurants and grocery suppliers.</p>
+      </div>
+    </div>
+
+    <!-- BRANDING -->
+    <div class="case-section" id="branding">
+      <h2>Branding</h2>
+      <p class="phase-label">01 · Branding</p>
+      <p>I led the branding direction for Matnajang, establishing the visual identity including logo, color system, and typography that conveys warmth and connection between food businesses.</p>
+
+      <figure class="case-img" style="max-width:700px; margin:1.75rem auto;">
+        <img src="assets/matnajang/branding.png" alt="Matnajang branding overview">
+        <figcaption>Branding — Participated in Branding / Prototyping / Graphic Design</figcaption>
+      </figure>
+    </div>
+
+    <!-- SERVICE DESIGN -->
+    <div class="case-section" id="service">
+      <h2>Service Design</h2>
+      <p class="phase-label">02 · Service Design</p>
+      <p>The service design process explored how restaurants and grocery suppliers interact, identifying pain points in the supply chain and opportunities for mutual profit enhancement through a shared platform.</p>
+
+      <figure class="case-img">
+        <img src="assets/matnajang/service-01.png" alt="Service design — overview">
+        <figcaption>Service Design — Platform Overview</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/matnajang/service-02.png" alt="Service design — flow">
+        <figcaption>Service Design — Service Flow</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/matnajang/service-03.png" alt="Service design — stakeholders">
+        <figcaption>Service Design — Stakeholder Map</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/matnajang/service-04.png" alt="Service design — blueprint">
+        <figcaption>Service Design — Service Blueprint</figcaption>
+      </figure>
+    </div>
+
+    <!-- MOBILE PROTOTYPE -->
+    <div class="case-section" id="mobile">
+      <h2>Mobile Prototype Design</h2>
+      <p class="phase-label">03 · Mobile Prototype</p>
+      <p>I designed and translated all the contents in the mobile application prototype, covering the full user flow from onboarding to daily usage.</p>
+
+      <figure class="case-img">
+        <img src="assets/matnajang/mobile-overview-01.png" alt="Mobile prototype overview">
+        <figcaption>Mobile Prototype — Screen Overview</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/matnajang/mobile-signup.png" alt="Sign Up Page">
+        <figcaption>Sign Up Page</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/matnajang/mobile-tutorial.png" alt="Main Page Tutorial">
+        <figcaption>Main Page Tutorial</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/matnajang/mobile-sub.png" alt="Sub Page">
+        <figcaption>Sub Page</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/matnajang/mobile-mypage.png" alt="My Page">
+        <figcaption>My Page</figcaption>
+      </figure>
+    </div>
+    <!-- VIDEO -->
+    <div class="case-section" id="video">
+      <h2>Tutorial Video</h2>
+      <p class="phase-label">04 · Video</p>
+      <figure class="case-img">
+        <video controls playsinline preload="metadata" style="width:100%; display:block;">
+          <source src="assets/matnajang/matnajang.mp4" type="video/mp4">
+        </video>
+        <figcaption>Matnajang — Mobile App Tutorial</figcaption>
+      </figure>
+  </div>
+
+  </div>
+
+  <div class="next-project">
+    <div>
+      <p class="next-label">Next Project</p>
+      <a href="project-strescape.html" class="next-title">Strescape — Gamifying Stress Management →</a>
+    </div>
+  </div>
+
+    <!-- FOOTER -->
+  <footer>
+    <p class="footer-sign">Let's make connection.</p>
+    <div class="footer-links">
+      <a href="mailto:yjk5202@psu.edu">Email</a>
+      <a href="https://linkedin.com/in/yeeun--kim" target="_blank">LinkedIn</a>
+      <a href="index.html">Work</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank">Resume</a>
+    </div>
+    <p class="footer-copy">© 2026 Yeeun Kim</p>
+  </footer>
+
+  <script>
+    // Cursor
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; dot.style.left=mx+'px'; dot.style.top=my+'px'; });
+    (function anim(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(anim); })();
+    document.querySelectorAll('a, button, figure').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+
+    // Progress bar
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => { bar.style.width = (window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%'; }, {passive:true});
+
+    // TOC
+    const toc = document.getElementById('caseToc');
+    const hero = document.querySelector('.case-hero');
+    if (toc && hero) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { toc.classList.toggle('toc-visible', !entry.isIntersecting); });
+      }, { threshold: 0 });
+      observer.observe(hero);
+    }
+  </script>
+</body>
+</html>

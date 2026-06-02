@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VR Learning Design — Yeeun Kim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0F172A; --rust: #1E54B7; --rust-light: #DBEAFE;
+      --rust-mid: #5B8DEF; --stone: #E8EFFC; --mist: #94A3B8;
+      --paper: #FFFFFF; --white: #F8FAFF;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; font-weight: 300; }
+    nav { position: sticky; top: 0; z-index: 100; padding: 1.1rem 4rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--stone); }
+    .nav-logo {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.1rem;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .nav-logo span { font-style: normal; color: var(--blue); }
+    .nav-back { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); text-decoration: none; transition: opacity 0.2s; }
+    .nav-back:hover { opacity: 0.6; }
+    .case-hero { padding: 5rem 4rem 4rem; max-width: 960px; margin: 0 auto; }
+    .case-tag { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rust); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--rust); }
+    .case-title { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 200; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 2.5rem; }
+    .case-title em { font-style: italic; color: var(--rust); }
+    .case-meta { display: flex; gap: 0; flex-wrap: wrap; border-top: 1px solid var(--stone); border-bottom: 1px solid var(--stone); }
+    .meta-item { padding: 1.25rem 2rem 1.25rem 0; margin-right: 2rem; border-right: 1px solid var(--stone); }
+    .meta-item:last-child { border-right: none; }
+    .meta-item label { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.35rem; }
+    .meta-item span { font-size: 0.88rem; font-weight: 500; color: var(--ink); }
+    .case-cover { width: 100%; aspect-ratio: 16/7; background: var(--stone); border: 2px dashed var(--rust-light); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; color: var(--mist); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; margin: 3rem 0 0; border-radius: 4px; overflow: hidden; }
+    .case-cover svg { width: 32px; height: 32px; opacity: 0.3; stroke: var(--mist); fill: none; stroke-width: 1.5; }
+    .case-body { max-width: 960px; margin: 0 auto; padding: 4rem 4rem 8rem; display: grid; grid-template-columns: 200px 1fr; gap: 0 4rem; align-items: start; }
+    .case-toc { position: sticky; top: 5rem; }
+    .toc-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 1rem; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toc-list a { font-size: 0.82rem; color: var(--mist); text-decoration: none; display: block; padding: 0.2rem 0 0.2rem 0.75rem; border-left: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+    .toc-list a:hover { color: var(--rust); border-left-color: var(--rust); }
+    .case-content { min-width: 0; }
+    .case-section { margin-bottom: 4rem; scroll-margin-top: 6rem; }
+    .case-section h2 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 300; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--stone); }
+    .case-section p { font-size: 0.95rem; line-height: 1.9; color: #475569; margin-bottom: 1rem; }
+    .case-section ul { margin: 1rem 0 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .case-section ul li { font-size: 0.92rem; line-height: 1.75; color: #475569; }
+    .case-img { width: 100%; aspect-ratio: 16/9; background: var(--stone); border: 2px dashed var(--rust-light); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); margin: 1.75rem 0; border-radius: 4px; }
+    .finding-box { background: var(--rust-light); border-left: 3px solid var(--rust); padding: 1.25rem 1.5rem; margin: 1.75rem 0; border-radius: 0 6px 6px 0; }
+    .finding-box strong { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rust); margin-bottom: 0.5rem; }
+    .finding-box p { font-size: 0.92rem; line-height: 1.75; color: var(--ink) !important; margin: 0 !important; }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--stone); border: 1px solid var(--stone); border-radius: 6px; overflow: hidden; margin: 1.75rem 0; }
+    .stat-cell { background: var(--white); padding: 1.5rem; text-align: center; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 200; color: var(--rust); line-height: 1; margin-bottom: 0.4rem; }
+    .stat-label { font-size: 0.72rem; color: var(--mist); letter-spacing: 0.06em; }
+    .next-project { border-top: 1px solid var(--stone); padding: 3rem 4rem; max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .next-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.5rem; }
+    .next-title { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: color 0.2s; }
+    .next-title:hover { color: var(--rust); }
+    @media (max-width: 760px) {
+      nav { padding: 1rem 1.5rem; } .case-hero { padding: 3rem 1.5rem 2rem; }
+      .case-body { grid-template-columns: 1fr; padding: 2rem 1.5rem 5rem; }
+      .case-toc { display: none; } .next-project { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; }
+      .stat-grid { grid-template-columns: 1fr; } .meta-item { padding: 1rem 1rem 1rem 0; margin-right: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <a href="index.html#research" class="nav-back">← Back to Portfolio</a>
+  </nav>
+
+  <div class="case-hero">
+    <p class="case-tag">Research · University of Michigan</p>
+    <h1 class="case-title">
+      VR Learning Design<br>for <em>Spatial Computing</em>
+    </h1>
+    <div class="case-meta">
+      <div class="meta-item">
+        <label>Role</label>
+        <span>Researcher & Co-design Facilitator</span>
+      </div>
+      <div class="meta-item">
+        <label>Methods</label>
+        <span>Co-design · Focus Groups · Qualitative Coding</span>
+      </div>
+      <div class="meta-item">
+        <label>Participants</label>
+        <span>Instructors & VR Developers</span>
+      </div>
+      <div class="meta-item">
+        <label>Context</label>
+        <span>Immersive VR Classroom Design</span>
+      </div>
+    </div>
+    <!-- ══ REPLACE: add cover image here ══ -->
+    <div class="case-cover">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Add cover image here
+    </div>
+  </div>
+
+  <div class="case-body">
+    <aside class="case-toc">
+      <p class="toc-label">Contents</p>
+      <ul class="toc-list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#methodology">Methodology</a></li>
+        <li><a href="#codesign">Co-design Process</a></li>
+        <li><a href="#findings">Key Findings</a></li>
+        <li><a href="#recommendations">Recommendations</a></li>
+      </ul>
+    </aside>
+
+    <main class="case-content">
+
+      <div class="case-section" id="overview">
+        <h2>Overview</h2>
+        <p>As spatial computing and immersive VR environments enter educational settings, instructors face entirely new challenges: how to structure a classroom, engage students, and deliver content effectively when the learning space is virtual and three-dimensional.</p>
+        <p>This project took an instructor-centered perspective — investigating how environmental settings, design parameters, and VR teaching tools shape the instructor's experience in immersive learning environments, with the goal of generating actionable design requirements.</p>
+      </div>
+
+      <div class="case-section" id="problem">
+        <h2>Problem</h2>
+        <p>Most VR classroom research focuses on student experience — learner engagement, knowledge retention, presence. The instructor perspective has been largely overlooked, despite instructors being the primary agents who design and deliver educational experiences.</p>
+        <ul>
+          <li>What classroom environment elements feel natural and effective for instructors in VR?</li>
+          <li>Which teaching tools translate well from physical to virtual classrooms?</li>
+          <li>What entirely new features does VR enable that physical spaces cannot?</li>
+        </ul>
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add problem framing or VR classroom context image here</div>
+      </div>
+
+      <div class="case-section" id="methodology">
+        <h2>Methodology</h2>
+        <p>A qualitative approach was used, combining focus group interviews, co-design workshops, qualitative coding, and pattern analysis to capture both instructors' lived experience and VR developers' technical perspectives.</p>
+        <ul>
+          <li><strong>Focus group interviews</strong> with instructors — current challenges and needs in VR teaching</li>
+          <li><strong>Co-design workshops</strong> — participatory sessions with instructors and VR designers/developers</li>
+          <li><strong>Qualitative coding</strong> — pattern finding and thematic summarization across participant inputs</li>
+        </ul>
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add methodology overview or workshop photos here</div>
+      </div>
+
+      <div class="case-section" id="codesign">
+        <h2>Co-design Process</h2>
+        <p>Co-design workshops were structured to bring instructors and VR designers into a shared creative process. Participants collaboratively identified and prioritized:</p>
+        <ul>
+          <li>Essential classroom environmental elements (spatial layout, lighting, audio zones)</li>
+          <li>Educational features needed for effective VR instruction</li>
+          <li>Prototype concepts for new VR-native teaching interactions</li>
+        </ul>
+        <div class="finding-box">
+          <strong>Design Principle</strong>
+          <p>Co-design ensured that VR classroom features were grounded in actual instructor workflows rather than assumptions about how teaching should translate to virtual space.</p>
+        </div>
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add co-design workshop activity or prototype image here</div>
+      </div>
+
+      <div class="case-section" id="findings">
+        <h2>Key Findings</h2>
+        <p>Qualitative analysis surfaced consistent patterns across instructor and developer perspectives regarding what makes a VR learning environment effective.</p>
+        <div class="finding-box">
+          <strong>Key Insight</strong>
+          <p>Instructors prioritized spatial control and student visibility above all other features — the ability to see all students simultaneously and move between them fluidly was identified as the most critical VR classroom affordance.</p>
+        </div>
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add findings summary or affinity diagram here</div>
+      </div>
+
+      <div class="case-section" id="recommendations">
+        <h2>Design Recommendations</h2>
+        <p>Findings were synthesized into design requirements for effective VR learning environments:</p>
+        <ul>
+          <li>Provide instructors with a persistent spatial overview of the full virtual classroom</li>
+          <li>Enable flexible environmental configuration (seating arrangements, zones) without technical expertise</li>
+          <li>Design VR-native teaching tools that go beyond physical whiteboard equivalents</li>
+          <li>Reduce cognitive overhead for instructors by automating routine classroom management tasks</li>
+          <li>Support social presence cues that signal student attention and engagement</li>
+        </ul>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="next-project">
+    <div>
+      <p class="next-label">Next Project</p>
+      <a href="project-vr-construction.html" class="next-title">Immersive VR Training for Human-Robot Collaboration →</a>
+    </div>
+  </div>
+
+</body>
+</html>

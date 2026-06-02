@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VR Training for Human-Robot Collaboration — Yeeun Kim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0F172A; --rust: #1E54B7; --rust-light: #DBEAFE;
+      --rust-mid: #5B8DEF; --stone: #E8EFFC; --mist: #94A3B8;
+      --paper: #FFFFFF; --white: #F8FAFF;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; font-weight: 300; }
+    nav { position: sticky; top: 0; z-index: 100; padding: 1.1rem 4rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--stone); }
+    .nav-logo {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.1rem;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .nav-logo span { font-style: normal; color: var(--blue); }
+    .nav-back { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); text-decoration: none; transition: opacity 0.2s; }
+    .nav-back:hover { opacity: 0.6; }
+    .case-hero { padding: 5rem 4rem 4rem; max-width: 960px; margin: 0 auto; }
+    .case-tag { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rust); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--rust); }
+    .case-title { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 200; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 2.5rem; }
+    .case-title em { font-style: italic; color: var(--rust); }
+    .case-meta { display: flex; gap: 0; flex-wrap: wrap; border-top: 1px solid var(--stone); border-bottom: 1px solid var(--stone); }
+    .meta-item { padding: 1.25rem 2rem 1.25rem 0; margin-right: 2rem; border-right: 1px solid var(--stone); }
+    .meta-item:last-child { border-right: none; }
+    .meta-item label { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.35rem; }
+    .meta-item span { font-size: 0.88rem; font-weight: 500; color: var(--ink); }
+    .case-cover { width: 100%; aspect-ratio: 16/7; background: var(--stone); border: 2px dashed var(--rust-light); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; color: var(--mist); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; margin: 3rem 0 0; border-radius: 4px; overflow: hidden; }
+    .case-cover svg { width: 32px; height: 32px; opacity: 0.3; stroke: var(--mist); fill: none; stroke-width: 1.5; }
+    .case-body { max-width: 960px; margin: 0 auto; padding: 4rem 4rem 8rem; display: grid; grid-template-columns: 200px 1fr; gap: 0 4rem; align-items: start; }
+    .case-toc { position: sticky; top: 5rem; }
+    .toc-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 1rem; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toc-list a { font-size: 0.82rem; color: var(--mist); text-decoration: none; display: block; padding: 0.2rem 0 0.2rem 0.75rem; border-left: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+    .toc-list a:hover { color: var(--rust); border-left-color: var(--rust); }
+    .case-content { min-width: 0; }
+    .case-section { margin-bottom: 4rem; scroll-margin-top: 6rem; }
+    .case-section h2 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 300; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--stone); }
+    .case-section p { font-size: 0.95rem; line-height: 1.9; color: #475569; margin-bottom: 1rem; }
+    .case-section ul { margin: 1rem 0 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .case-section ul li { font-size: 0.92rem; line-height: 1.75; color: #475569; }
+    .case-img { width: 100%; aspect-ratio: 16/9; background: var(--stone); border: 2px dashed var(--rust-light); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); margin: 1.75rem 0; border-radius: 4px; }
+    .finding-box { background: var(--rust-light); border-left: 3px solid var(--rust); padding: 1.25rem 1.5rem; margin: 1.75rem 0; border-radius: 0 6px 6px 0; }
+    .finding-box strong { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rust); margin-bottom: 0.5rem; }
+    .finding-box p { font-size: 0.92rem; line-height: 1.75; color: var(--ink) !important; margin: 0 !important; }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--stone); border: 1px solid var(--stone); border-radius: 6px; overflow: hidden; margin: 1.75rem 0; }
+    .stat-cell { background: var(--white); padding: 1.5rem; text-align: center; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 200; color: var(--rust); line-height: 1; margin-bottom: 0.4rem; }
+    .stat-label { font-size: 0.72rem; color: var(--mist); letter-spacing: 0.06em; }
+    .next-project { border-top: 1px solid var(--stone); padding: 3rem 4rem; max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .next-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.5rem; }
+    .next-title { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: color 0.2s; }
+    .next-title:hover { color: var(--rust); }
+    @media (max-width: 760px) {
+      nav { padding: 1rem 1.5rem; } .case-hero { padding: 3rem 1.5rem 2rem; }
+      .case-body { grid-template-columns: 1fr; padding: 2rem 1.5rem 5rem; }
+      .case-toc { display: none; } .next-project { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; }
+      .stat-grid { grid-template-columns: 1fr; } .meta-item { padding: 1rem 1rem 1rem 0; margin-right: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <a href="index.html#research" class="nav-back">← Back to Portfolio</a>
+  </nav>
+
+  <div class="case-hero">
+    <p class="case-tag">Research · Penn State University</p>
+    <h1 class="case-title">
+      Immersive VR Training for<br><em>Human-Robot Collaboration in Construction</em>
+    </h1>
+    <div class="case-meta">
+      <div class="meta-item">
+        <label>Role</label>
+        <span>Lead Researcher</span>
+      </div>
+      <div class="meta-item">
+        <label>Interviews</label>
+        <span>8 Industry Experts & Faculty</span>
+      </div>
+      <div class="meta-item">
+        <label>Coded Segments</label>
+        <span>881 across 120 min data</span>
+      </div>
+      <div class="meta-item">
+        <label>Tools</label>
+        <span>NVivo 14 · Figma · Oculus Quest 2</span>
+      </div>
+    </div>
+    <!-- ══ REPLACE: add cover image here ══ -->
+    <div class="case-cover">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Add cover image here
+    </div>
+  </div>
+
+  <div class="case-body">
+    <aside class="case-toc">
+      <p class="toc-label">Contents</p>
+      <ul class="toc-list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#methodology">Methodology</a></li>
+        <li><a href="#analysis">Analysis</a></li>
+        <li><a href="#prototype">Prototype</a></li>
+        <li><a href="#findings">Key Findings</a></li>
+        <li><a href="#recommendations">Recommendations</a></li>
+      </ul>
+    </aside>
+
+    <main class="case-content">
+
+      <div class="case-section" id="overview">
+        <h2>Overview</h2>
+        <p>Construction sites are increasingly integrating robotic systems — from autonomous excavators to collaborative assembly robots. Workers must learn to operate alongside these systems safely and effectively, yet existing training programs rarely address the unique demands of human-robot collaboration (HRC) in construction environments.</p>
+        <p>This generative research project identified training gaps and user needs through in-depth expert interviews, then translated findings into VR-based training design requirements and Figma prototypes.</p>
+
+        <div class="stat-grid">
+          <div class="stat-cell">
+            <div class="stat-num">8</div>
+            <div class="stat-label">Expert Interviews</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">881</div>
+            <div class="stat-label">Coded Segments</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">9</div>
+            <div class="stat-label">Codebook Dimensions</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-section" id="problem">
+        <h2>Problem</h2>
+        <p>As construction robotics advances, the industry faces a critical skills gap: workers lack structured training for safe, effective collaboration with robotic systems. Current training approaches are either too generic or do not exist at all for emerging HRC scenarios.</p>
+        <ul>
+          <li>What specific knowledge and skills do workers need for effective human-robot collaboration on construction sites?</li>
+          <li>What gaps exist in current training programs?</li>
+          <li>How can immersive VR address these gaps in ways that physical training cannot?</li>
+        </ul>
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add problem context or construction robotics image here</div>
+      </div>
+
+      <div class="case-section" id="methodology">
+        <h2>Methodology</h2>
+        <p>Semi-structured interviews were conducted with 8 industry experts and university faculty with direct experience in construction robotics, workforce training, and human-robot interaction. Participants included:</p>
+        <ul>
+          <li>Construction site managers with robotics deployment experience</li>
+          <li>University faculty specializing in construction engineering and HRC research</li>
+          <li>VR training developers with construction industry clients</li>
+        </ul>
+        <p>Each interview was approximately 60–90 minutes, yielding 120 minutes of analyzed interview data. All interviews were recorded, transcribed, and imported into NVivo 14 for systematic analysis.</p>
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add interview setup or participant overview image here</div>
+      </div>
+
+      <div class="case-section" id="analysis">
+        <h2>Qualitative Analysis</h2>
+        <p>A 9-dimension qualitative codebook was developed to systematically capture training needs, HRC challenges, and VR design requirements across all interview data.</p>
+
+        <div class="finding-box">
+          <strong>Rigor & Reliability</strong>
+          <p>Inter-rater reliability was formally established before full-scale coding — ensuring that the 881 coded segments across 120 minutes of interview data reflect consistent, replicable interpretation rather than a single coder's perspective.</p>
+        </div>
+
+        <p>Pattern finding and thematic summarization across the coded segments generated a consolidated set of training requirements and design priorities for the VR training interface.</p>
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add NVivo codebook structure or coded output visualization here</div>
+      </div>
+
+      <div class="case-section" id="prototype">
+        <h2>Prototype Development</h2>
+        <p>Research findings were translated directly into design artifacts — Figma prototypes for a VR-based construction robot training interface. Prototypes were developed at two fidelity levels and tested on two platforms:</p>
+        <ul>
+          <li><strong>Desktop version</strong> — lower barrier to access, suitable for pre-site onboarding</li>
+          <li><strong>Oculus Quest 2 version</strong> — immersive, spatially accurate simulation of construction environments</li>
+        </ul>
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add Figma prototype screenshots here</div>
+        <div class="case-img">Add Oculus Quest 2 prototype or usability test photo here</div>
+      </div>
+
+      <div class="case-section" id="findings">
+        <h2>Key Findings</h2>
+        <p>Expert interviews revealed consistent patterns in training gaps and VR design needs across industry and academic perspectives.</p>
+        <div class="finding-box">
+          <strong>Key Insight</strong>
+          <p>Experts consistently identified situational awareness as the most critical and undertrained skill for human-robot collaboration — specifically, the ability to predict robot movement trajectories and respond appropriately in shared physical spaces.</p>
+        </div>
+        <!-- ══ REPLACE ══ -->
+        <div class="case-img">Add findings summary or thematic map here</div>
+      </div>
+
+      <div class="case-section" id="recommendations">
+        <h2>Design Recommendations</h2>
+        <p>Findings were synthesized into VR training design requirements for human-robot collaboration in construction:</p>
+        <ul>
+          <li>Simulate robot trajectory visualization to build spatial awareness and safe proximity habits</li>
+          <li>Include scenario-based training for edge cases — unexpected robot behavior, emergency stops, sensor failures</li>
+          <li>Design progressive skill-building sequences from low-stakes to high-complexity HRC tasks</li>
+          <li>Embed procedural knowledge checks at key decision points within VR training scenarios</li>
+          <li>Support cross-platform delivery (desktop + VR headset) to maximize accessibility across worker demographics</li>
+        </ul>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="next-project">
+    <div>
+      <p class="next-label">Back to Portfolio</p>
+      <a href="main.html#research" class="next-title">← View All Projects</a>
+    </div>
+  </div>
+
+</body>
+</html>

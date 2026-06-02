@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAEMI — Yeeun Kim</title>
+  <link rel="icon" type="image/png" href="yk-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink:        #1A1708;
+      --paper:      #FFFFFF;
+      --white:      #FFFDF5;
+      --stone:      #F0EACC;
+      --mist:       #94A3B8;
+      --teal:       #FFCC00;
+      --teal-mid:   #C9A800;
+      --teal-light: #F5EEB8;
+      --teal-pale:  #FDFAED;
+      --teal-glow:  #F0D95C;
+      --ff-display: 'Fraunces', Georgia, serif;
+      --ff-body:    'Instrument Sans', sans-serif;
+    }
+    
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; font-weight: 300; }
+    a { color: inherit; text-decoration: none; }
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; padding: 1.1rem 4rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--stone); }
+    .nav-logo { font-family: 'Fraunces', Georgia, serif; font-size: 1.1rem; font-weight: 300; font-style: italic; letter-spacing: 0.02em; text-decoration: none; color: var(--ink); }
+    .nav-logo span { font-style: normal; color: var(--teal); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; text-decoration: none; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-resume { color: var(--teal) !important; border: 1px solid var(--stone); padding: 0.35rem 1rem; border-radius: 100px; transition: background 0.2s, color 0.2s !important; }
+    .nav-resume:hover { background: var(--teal); color: white !important; }
+
+    /* HERO */
+    .case-hero { background: var(--teal); padding: 3rem 4rem 0; position: relative; overflow: hidden; }
+    .case-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 75% 40%, rgba(240,217,92,0.2) 0%, transparent 65%); pointer-events: none; }
+    .hero-inner { max-width: 860px; margin: 0 auto; position: relative; }
+    .case-tag { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--paper); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--paper); }
+    .case-title { font-family: 'Fraunces', serif; font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 200; line-height: 1.0; letter-spacing: -0.03em; color: #fff; margin-bottom: 0.6rem; }
+    .case-subtitle { font-size: 1rem; font-weight: 300; color: rgba(255,255,255); margin-bottom: 0.5rem; }
+    .hero-cover { width: 100%; margin-top: 2rem; border-radius: 8px 8px 0 0; overflow: hidden; background: transparent; display: flex; justify-content: center; align-items: flex-end; height: 465px; }
+    .hero-cover img { height: 100%; width: auto; display: block; object-fit: contain; object-position: bottom; border-radius: 8px 8px 0 0;}
+
+    /* META */
+    .case-meta { background: var(--teal-pale); border-bottom: 1px solid var(--teal-light); padding: 0 4rem; }
+    .case-meta-inner { justify-content: space-between; max-width: 1300px; margin: 0 auto; display: flex; flex-wrap: wrap; }
+    .meta-item { padding: 1.5rem 2.5rem 1.5rem 0; margin-right: 2.5rem; border-right: 1px solid var(--teal-light); }
+    .meta-item:last-child { border-right: none; }
+    .meta-item label { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal-mid); margin-bottom: 0.35rem; }
+    .meta-item span { font-size: 0.88rem; font-weight: 500; color: var(--ink); }
+
+    /* JUMP LINK */
+    .jump-link { display: block; text-align: center; padding: 1rem; background: var(--teal-light); color: var(--teal); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
+    .jump-link:hover { background: var(--teal-glow); }
+
+    /* BODY */
+    .case-body { max-width: 1300px; margin: 0 auto; padding: 4rem 4rem 8rem; }
+
+    /* TOC */
+    .case-toc { display: none; }
+    @media (min-width: 1440px) {
+      .case-toc { display: block; position: fixed; top: 6rem; left: max(1.5rem, calc(50% - 780px)); width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+      .case-toc.toc-visible { opacity: 1; pointer-events: all; }
+    }
+    .toc-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 1rem; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .toc-list a { font-size: 0.78rem; color: var(--mist); text-decoration: none; display: block; padding: 0.2rem 0 0.2rem 0.75rem; border-left: 2px solid transparent; transition: color 0.2s, border-color 0.2s; line-height: 1.4; }
+    .toc-list a:hover { color: var(--teal); border-left-color: var(--teal); }
+
+    /* SECTIONS */
+    .case-section { margin-bottom: 5rem; scroll-margin-top: 6rem; }
+    .case-section h2 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 300; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--teal-light); }
+    .case-section h3 { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 400; color: var(--teal); margin: 2rem 0 0.75rem; }
+    .case-section h4 { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-mid); margin: 1.5rem 0 0.6rem; }
+    .case-section p { font-size: 0.95rem; line-height: 1.9; color: #475569; margin-bottom: 1rem; }
+    .case-section ul { margin: 0.75rem 0 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.45rem; }
+    .case-section ul li { font-size: 0.92rem; line-height: 1.75; color: #475569; }
+
+    /* IMAGES */
+    figure.case-img { width: 100%; border-radius: 8px; overflow: hidden; margin: 1.75rem 0; border: 1px solid var(--teal-light); }
+    figure.case-img img { width: 100%; display: block; }
+    figure.case-img figcaption { font-size: 0.7rem; color: var(--mist); letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; background: var(--teal-pale); border-top: 1px solid var(--teal-light); }
+
+    .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.75rem 0; }
+    .img-grid-2 figure { border-radius: 8px; overflow: hidden; border: 1px solid var(--teal-light); margin: 0; }
+    .img-grid-2 img { width: 100%; display: block; }
+    .img-grid-2 figcaption { font-size: 0.68rem; color: var(--mist); letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 0.75rem; background: var(--teal-pale); border-top: 1px solid var(--teal-light); }
+
+    .img-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1.75rem 0; }
+    .img-grid-3 figure { border-radius: 8px; overflow: hidden; border: 1px solid var(--teal-light); margin: 0; }
+    .img-grid-3 img { width: 100%; display: block; }
+    .img-grid-3 figcaption { font-size: 0.65rem; color: var(--mist); letter-spacing: 0.08em; text-transform: uppercase; padding: 0.4rem 0.6rem; background: var(--teal-pale); border-top: 1px solid var(--teal-light); }
+
+    .img-grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin: 1.75rem 0; }
+    .img-grid-4 figure { border-radius: 8px; overflow: hidden; border: 1px solid var(--teal-light); margin: 0; }
+    .img-grid-4 img { width: 100%; display: block; }
+    .img-grid-4 figcaption { font-size: 0.65rem; color: var(--mist); letter-spacing: 0.08em; text-transform: uppercase; padding: 0.4rem 0.6rem; background: var(--teal-pale); border-top: 1px solid var(--teal-light); }
+
+    /* FINDING BOX */
+    .finding-box { background: var(--teal-light); border-left: 3px solid var(--teal); padding: 1.25rem 1.5rem; margin: 1.75rem 0; border-radius: 0 6px 6px 0; }
+    .finding-box strong { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.5rem; }
+    .finding-box p { font-size: 0.92rem; line-height: 1.75; color: var(--ink) !important; margin: 0 !important; }
+
+    /* PHASE LABEL */
+    .phase-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); background: var(--teal-light); display: inline-block; padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1.25rem; }
+
+    /* STAT GRID */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--teal-light); border: 1px solid var(--teal-light); border-radius: 6px; overflow: hidden; margin: 1.75rem 0; }
+    .stat-cell { background: var(--white); padding: 1.25rem; text-align: center; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 200; color: var(--teal); line-height: 1; margin-bottom: 0.3rem; }
+    .stat-label { font-size: 0.68rem; color: var(--mist); letter-spacing: 0.05em; }
+
+    /* NEXT PROJECT */
+    .next-project { border-top: 1px solid var(--teal-light); padding: 3rem 4rem; max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .next-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.5rem; }
+    .next-title { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: color 0.2s; }
+    .next-title:hover { color: var(--teal); }
+
+    /* ── FOOTER ── */
+    footer { padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem); border-top: 1px solid var(--stone); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .footer-sign { font-family: var(--ff-display); font-size: 0.95rem; font-weight: 300; font-style: italic; color: var(--mist); }
+    .footer-links { display: flex; gap: 1.75rem; }
+    .footer-links a { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-copy { font-size: 0.72rem; color: var(--mist); }
+
+    /* RESPONSIVE */
+    @media (max-width: 760px) {
+      nav { padding: 1rem 1.5rem; }
+      .case-hero { padding: 4rem 1.5rem 0; }
+      .case-meta { padding: 0 1.5rem; }
+      .case-body { padding: 2rem 1.5rem 5rem; }
+      .next-project { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; }
+      .stat-grid { grid-template-columns: repeat(2,1fr); }
+      .img-grid-2, .img-grid-3, .img-grid-4 { grid-template-columns: 1fr; }
+      .meta-item { padding: 1rem 1rem 1rem 0; margin-right: 1rem; }
+      .hero-cover { height: 260px; }
+    }
+    /* YOUTUBE FACADE */
+    .yt-facade {
+      position: relative; width: 100%; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; margin: 1.75rem 0;
+      border: 1px solid var(--teal-light); cursor: pointer; background: #000;
+    }
+    .yt-facade img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+    .yt-facade:hover img { transform: scale(1.02); }
+    .yt-facade-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+    .yt-facade:hover .yt-facade-overlay { background: rgba(0,0,0,0.5); }
+    .yt-play-btn { width: 72px; height: 72px; border-radius: 50%; background: #FF0000; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 24px rgba(0,0,0,0.4); transition: transform 0.2s, background 0.2s; }
+    .yt-facade:hover .yt-play-btn { transform: scale(1.12); background: #cc0000; }
+    .yt-play-btn svg { width: 28px; height: 28px; fill: white; margin-left: 4px; }
+    .yt-facade iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: none; }
+    .yt-facade.playing img, .yt-facade.playing .yt-facade-overlay { display: none; }
+    .yt-facade.playing iframe { display: block; }
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <div class="nav-links">
+      <a href="index.html">Work</a>
+      <a href="about.html">About</a>
+      <a href="publications.html">Publications</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank" class="nav-resume">Resume</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="case-hero">
+    <div class="hero-inner">
+      <p class="case-tag">UX Research & Design · HAII Corporation · Seoul, South Korea</p>
+      <h1 class="case-title">SAEMI</h1>
+      <p class="case-subtitle">Digital Therapeutics AI Companion for Cognitive Health</p>
+      <div class="hero-cover">
+        <img src="assets/saemi/hero.png" alt="SAEMI — AI Chatbot Companion">
+      </div>
+    </div>
+  </div>
+
+  <!-- META -->
+  <div class="case-meta">
+    <div class="case-meta-inner">
+      <div class="meta-item"><label>Role</label><span>UX Researcher & Designer</span></div>
+      <div class="meta-item"><label>Company</label><span>HAII Corporation</span></div>
+      <div class="meta-item"><label>Duration</label><span>Aug 2019 – Aug 2020</span></div>
+      <div class="meta-item"><label>Location</label><span>Seoul, South Korea</span></div>
+      <div class="meta-item"><label>Areas</label><span>Interface Design · UX Research · Branding</span></div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <aside class="case-toc" id="caseToc">
+    <p class="toc-label">Contents</p>
+    <ul class="toc-list">
+      <li><a href="#about">About</a></li>
+      <li><a href="#visual-design">Visual Design</a></li>
+      <li><a href="#mobile-ui">Mobile UI</a></li>
+      <li><a href="#branding">Branding</a></li>
+      <li><a href="#marketing">Marketing</a></li>
+      <li><a href="#reflection">Reflection</a></li>
+      <li><a href="#video">Video</a></li>
+    </ul>
+  </aside>
+
+  <div class="case-body">
+
+    <!-- ABOUT -->
+    <div class="case-section" id="about">
+      <h2>About the Project</h2>
+      <p>During my time at HAII Corporation in Seoul, I worked as a UX researcher and designer on <strong>SAEMI</strong> — a software-based AI chatbot companion designed to support cognitive health, primarily targeting Alzheimer's disease prevention and other mental illnesses through cognitive training games and guided conversation.</p>
+      <p>Unlike traditional drugs or medical devices, SAEMI interacts directly with users as a compassionate AI companion — making it a standout product in the digital therapeutics space. My work spanned branding, visual UX/UI design, and marketing.</p>
+
+      <figure class="case-img">
+        <img src="assets/saemi/overview.png" alt="SAEMI overview">
+        <figcaption>SAEMI — Digital Therapeutics AI Companion overview</figcaption>
+      </figure>
+
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="stat-num">200%</div><div class="stat-label">User Increase from Marketing</div></div>
+        <div class="stat-cell"><div class="stat-num">3</div><div class="stat-label">Areas of Contribution</div></div>
+        <div class="stat-cell"><div class="stat-num">AI</div><div class="stat-label">Chatbot Companion</div></div>
+        <div class="stat-cell"><div class="stat-num">DTx</div><div class="stat-label">Digital Therapeutics</div></div>
+      </div>
+    </div>
+
+    <!-- VISUAL DESIGN -->
+    <div class="case-section" id="visual-design">
+      <h2>Visual Design</h2>
+      <p class="phase-label">01 · Visual Design</p>
+      <p>Working closely with designers and developers, I analyzed the existing user interface and contributed to a comprehensive Web UI redesign — improving how users interact with the SAEMI platform across key pages. My contributions included design concepts, color systems, layout arrangement, and UX copywriting.</p>
+
+      <figure class="case-img">
+        <img src="assets/saemi/visual-overview.png" alt="Visual design overview">
+        <figcaption>Web UI redesign — overall design direction</figcaption>
+      </figure>
+
+      <h3>Main Page</h3>
+      <figure class="case-img">
+        <img src="assets/saemi/web-main-01.png" alt="Main page — above fold">
+        <figcaption>Main Page — above the fold</figcaption>
+      </figure>
+      <figure class="case-img">
+        <img src="assets/saemi/web-main-02.png" alt="Main page — content sections">
+        <figcaption>Main Page — content sections</figcaption>
+      </figure>
+      <figure class="case-img">
+        <img src="assets/saemi/web-main-03.png" alt="Main page — lower sections">
+        <figcaption>Main Page — lower sections</figcaption>
+      </figure>
+
+      <h3>Purchase Page</h3>
+      <div class="img-grid-3">
+        <figure>
+          <img src="assets/saemi/web-purchase-01.png" alt="Purchase page 1">
+          <figcaption>Purchase Flow — Step 1</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/saemi/web-purchase-02.png" alt="Purchase page 2">
+          <figcaption>Purchase Flow — Step 2</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/saemi/web-purchase-03.png" alt="Purchase page 3">
+          <figcaption>Purchase Flow — Step 3</figcaption>
+        </figure>
+      </div>
+
+      <h3>My Page</h3>
+      <figure class="case-img">
+        <img src="assets/saemi/web-mypage.png" alt="My page design">
+        <figcaption>My Page — user dashboard and profile</figcaption>
+      </figure>
+    </div>
+
+    <!-- MOBILE UI -->
+    <div class="case-section" id="mobile-ui">
+      <h2>Mobile UI Design</h2>
+      <p class="phase-label">02 · Mobile UI</p>
+      <p>In addition to the web experience, I contributed to the mobile interface design — ensuring consistency across the SAEMI platform on smartphone screens.</p>
+
+      <div class="img-grid-4">
+        <figure>
+          <img src="assets/saemi/mobile-main.png" alt="Mobile — Main Page">
+          <figcaption>Main Page</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/saemi/mobile-mypage.png" alt="Mobile — My Page">
+          <figcaption>My Page</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/saemi/mobile-login.png" alt="Mobile — Login Page">
+          <figcaption>Login Page</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/saemi/mobile-purchase.png" alt="Mobile — Purchase Page">
+          <figcaption>Purchase Page</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- BRANDING -->
+    <div class="case-section" id="branding">
+      <h2>Branding</h2>
+      <p class="phase-label">03 · Branding</p>
+      <p>I created a new branding identity for the SAEMI application under the name <strong>Alzguard 2.0</strong>.</p>
+
+      <div class="finding-box">
+        <strong>Naming Rationale</strong>
+        <p>Alzheimer's disease + Guard = Alzguard. The name communicates the core mission: protecting users from cognitive decline through a proactive, AI-driven companion — not a passive tool.</p>
+      </div>
+
+      <p>Alzguard 2.0 is the digital therapeutics platform powering SAEMI — a software-based AI chatbot that aims to prevent Alzheimer's disease and other mental illnesses through cognitive training games and conversation. The key differentiator: while drugs and medical devices don't interact with users, <strong>SAEMI does</strong>.</p>
+
+      <figure class="case-img">
+        <img src="assets/saemi/Alzguard eng.png" alt="Alzguard 2.0 branding — logo and identity">
+        <figcaption>Alzguard 2.0 — new brand identity for the SAEMI platform</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/saemi/hero.png" alt="Concept">
+        <figcaption>Concept</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/saemi/branding-02.png" alt="Core Value">
+        <figcaption>Core Value</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/saemi/branding-04.png" alt="Overview">
+        <figcaption>Overview</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/saemi/branding-05.png" alt="Project Goal">
+        <figcaption>Project Goal</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/saemi/branding-06.png" alt="Concept Brief">
+        <figcaption>Concept Brief</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/saemi/branding-07.png" alt="Service Feature & Benefit">
+        <figcaption>Service Feature & Benefit</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/saemi/branding-08.png" alt="Target Users">
+        <figcaption>Target Users</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/saemi/branding-09.png" alt="Survey Target Users">
+        <figcaption>Survey Target Users</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/saemi/branding-10.png" alt="Persona">
+        <figcaption>Persona</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/saemi/branding-11.png" alt="Main Color">
+        <figcaption>Main Color</figcaption>
+      </figure>
+    </div>
+
+    <!-- MARKETING -->
+    <div class="case-section" id="marketing">
+      <h2>Marketing</h2>
+      <p class="phase-label">04 · Marketing</p>
+      <p>To grow SAEMI's user base, I took on a multifaceted marketing role — producing video content, managing the official blog, and contributing to TV commercial efforts.</p>
+
+      <ul>
+        <li><strong>Video Production</strong> — Filmed and edited promotional videos for SAEMI</li>
+        <li><strong>Blog Management</strong> — Published regular posts covering digital therapeutics, mental illness, mental healthcare, and SAEMI updates</li>
+        <li><strong>TV Commercials</strong> — Contributed to broadcast advertising campaigns</li>
+      </ul>
+
+      <div class="finding-box">
+        <strong>Impact</strong>
+        <p>Due to marketing efforts, SAEMI saw a 200% user increase from the time I joined the team to the end of my tenure — demonstrating the direct business impact of integrated UX and marketing work.</p>
+      </div>
+
+      <figure class="case-img">
+        <img src="assets/saemi/marketing-01.png" alt="Marketing — video content">
+        <figcaption>Video Production & Promotion</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/saemi/marketing-02.png" alt="Marketing — blog and campaigns">
+        <figcaption>Blog & Campaign Management</figcaption>
+      </figure>
+    </div>
+
+    <!-- REFLECTION -->
+    <div class="case-section" id="reflection">
+      <h2>Reflection</h2>
+      <ul>
+        <li><strong>Cross-functional collaboration is a skill in itself.</strong> Working alongside developers, designers, and medical advisors taught me how to translate between technical constraints and user-centered goals.</li>
+        <li><strong>Brand identity shapes user trust.</strong> In digital therapeutics, trust is the product. The Alzguard 2.0 rebrand reinforced that every visual decision — from color to naming — carries clinical and emotional weight.</li>
+        <li><strong>Marketing and UX are not separate.</strong> Seeing a 200% user increase as a direct result of integrated content and design work showed me that the user journey doesn't start at the product — it starts at awareness.</li>
+      </ul>
+    </div>
+
+    <!-- VIDEO -->
+    <div class="case-section" id="video">
+      <h2>Video</h2>
+      <div class="yt-facade" id="ytFacade">
+        <img src="https://img.youtube.com/vi/W28w3iFJH-4/maxresdefault.jpg" alt="SAEMI Video">
+        <div class="yt-facade-overlay">
+          <div class="yt-play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <iframe id="ytIframe" data-src="https://www.youtube.com/embed/W28w3iFJH-4?autoplay=1" title="SAEMI Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <script>
+        document.getElementById('ytFacade').addEventListener('click', function() {
+          var iframe = document.getElementById('ytIframe');
+          iframe.src = iframe.dataset.src;
+          this.classList.add('playing');
+        });
+      </script>
+    </div>
+
+  </div>
+
+  <div class="next-project">
+    <div>
+      <p class="next-label">Next Project</p>
+      <a href="project-motd.html" class="next-title">MOTD - Mobility of the Day →</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-sign">Let's make connection.</p>
+    <div class="footer-links">
+      <a href="mailto:yjk5202@psu.edu">Email</a>
+      <a href="https://linkedin.com/in/yeeun--kim" target="_blank">LinkedIn</a>
+      <a href="index.html">Work</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank">Resume</a>
+    </div>
+    <p class="footer-copy">© 2026 Yeeun Kim</p>
+  </footer>
+
+  <script>
+    const toc = document.getElementById('caseToc');
+    const hero = document.querySelector('.case-hero');
+    if (toc && hero) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          toc.classList.toggle('toc-visible', !entry.isIntersecting);
+        });
+      }, { threshold: 0 });
+      observer.observe(hero);
+    }
+    
+  </script>
+</body>
+</html>

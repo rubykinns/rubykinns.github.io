@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Yeeun Kim</title>
+  <link rel="icon" type="image/png" href="yk-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+     --ink:        #0F172A;
+      --paper:      #FFFFFF;
+      --rust:       #1E54B7;
+      --rust-light: #DBEAFE;
+      --rust-mid:   #5B8DEF;
+      --sage:       #0EA5E9;
+      --stone:      #E8EFFC;
+      --mist:       #94A3B8;
+      --white:      #F8FAFF;
+      --ff-display: 'Fraunces', Georgia, serif;
+      --ff-body:    'Instrument Sans', sans-serif;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--ff-body); background: var(--paper); color: var(--ink);
+           line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      padding: 1.25rem clamp(1.5rem, 5vw, 4rem);
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(255,255,255,0.94); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--stone);
+    }
+    .nav-logo { font-family: var(--ff-display); font-size: 1rem; font-weight: 300; font-style: italic; }
+    .nav-logo span { font-style: normal; color: var(--rust); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+    .nav-resume { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); border: 1px solid var(--stone); padding: 0.35rem 1rem; border-radius: 100px; transition: background 0.2s, color 0.2s; }
+    .nav-resume:hover { background: var(--rust); color: white; }
+
+    /* ── WRAP ── */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 4rem); }
+    .section { padding: clamp(4rem, 8vw, 7rem) 0; }
+    .section + .section { border-top: 1px solid var(--stone); }
+
+    /* ── ABOUT HERO ── */
+    .about-hero { padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem); }
+    .about-grid { display: grid; grid-template-columns: 320px 1fr; gap: clamp(3rem, 6vw, 7rem); align-items: start; }
+    .about-photo img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 4px; display: block; }
+    .about-photo-cap { font-size: 0.68rem; color: var(--mist); letter-spacing: 0.08em; margin-top: 0.75rem; }
+    .about-eyebrow { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rust); display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.5rem; }
+    .about-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--rust); }
+
+    /* ──  About text ── */
+    .about-eyebrow { margin-bottom: 1.5rem; }
+    .about-heading {
+      font-family: var(--ff-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+    .about-heading em { font-style: italic; color: var(--rust); }
+    .about-body p {
+      font-size: 0.95rem;
+      color: #475569;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+    .about-body strong { color: var(--ink); font-weight: 600; }
+
+    .contact-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 2rem;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.9rem;
+      background: var(--stone);
+      border-radius: 100px;
+      font-size: 0.78rem;
+      color: var(--ink);
+      transition: background 0.2s, color 0.2s;
+    }
+    .chip:hover { background: var(--rust); color: var(--white); }
+    .chip-icon { font-size: 0.8rem; }
+    .about-body p { font-size: 0.95rem; line-height: 1.9; color: #475569; margin-bottom: 1rem; }
+    
+    .hero-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 2.5rem 0; border-top: 1px solid var(--stone); border-bottom: 1px solid var(--stone);
+      margin-bottom: 4rem;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: clamp(1.5rem, 5vw, 4rem);
+      padding-right: clamp(1.5rem, 5vw, 4rem);
+    }
+    .hero-stats { display: flex; gap: 3rem; }
+    .hero-stat .num {
+      font-family: var(--ff-display); font-size: 1.8rem;
+      font-weight: 300; line-height: 1; color: var(--rust);
+    }
+    .hero-stat .lbl {
+      font-size: 0.68rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--mist); margin-top: 0.2rem;
+    }
+    @media (max-width: 640px) { .hero-stats { gap: 1.5rem; flex-wrap: wrap; } }
+
+    /* ─────────────────────────────────────────────
+       MARQUEE
+    ───────────────────────────────────────────── */
+    .marquee-band {
+      background: var(--ink);
+      padding: 1rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-inner {
+      display: inline-flex;
+      animation: marquee 28s linear infinite;
+    }
+    .marquee-inner:hover { animation-play-state: paused; }
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 1.5rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .marquee-dot { color: var(--rust); font-size: 0.5rem; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── EDUCATION ── */
+    .edu-rows { display: flex; flex-direction: column; gap: 0; }
+    .edu-row { display: grid; grid-template-columns: 140px 1fr; gap: 2rem; padding: 1.75rem 0; border-top: 1px solid var(--stone); }
+    .edu-year { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; color: var(--mist); padding-top: 3px; }
+    .edu-deg { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .edu-school { font-size: 0.88rem; color: var(--rust); }
+    .edu-note { font-size: 0.78rem; color: var(--ink); margin-top: 0.2rem; }
+
+    /* ── EXPERIENCE ── */
+    .exp-rows { display: flex; flex-direction: column; }
+    .exp-row { display: grid; grid-template-columns: 200px 1fr; gap: 2rem; padding: 1.75rem 0; border-top: 1px solid var(--stone); }
+    .exp-meta { }
+    .exp-company { font-weight: 600; font-size: 0.95rem; }
+    .exp-period { font-size: 0.72rem; color: var(--mist); margin-top: 0.2rem; }
+    .exp-location { font-size: 0.72rem; color: var(--mist); }
+    .exp-role { font-family: var(--ff-display); font-size: 1.1rem; font-weight: 300; margin-bottom: 0.75rem; }
+    .exp-bullets { display: flex; flex-direction: column; gap: 0.4rem; padding-left: 1.1rem; }
+    .exp-bullets li { font-size: 0.88rem; color: #475569; line-height: 1.7; }
+
+    /* ── PUBLICATIONS ── */
+    .pub-rows { display: flex; flex-direction: column; }
+    .pub-row { display: grid; grid-template-columns: 36px 1fr 60px; gap: 1.5rem; align-items: start; padding: 1.5rem 0; border-top: 1px solid var(--stone); }
+    .pub-n { font-family: var(--ff-display); font-size: 0.85rem; font-style: italic; color: var(--mist); padding-top: 3px; }
+    .pub-venue { display: inline-block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); background: var(--rust-light); padding: 0.18rem 0.6rem; border-radius: 100px; margin-bottom: 0.5rem; }
+    .pub-title { font-size: 0.9rem; line-height: 1.6; color: var(--ink); margin-bottom: 0.3rem; }
+    .pub-title a { color: var(--rust); }
+    .pub-title a:hover { text-decoration: underline; }
+    .pub-authors { font-size: 0.78rem; color: var(--ink); }
+    .pub-authors span { font-weight: 600;}
+    .pub-year { font-family: var(--ff-display); font-size: 0.82rem; font-style: italic; color: var(--mist); text-align: right; padding-top: 3px; }
+
+    /* ── SKILLS ── */
+    .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .skill-cat-name { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .skill-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .skill-pill { font-size: 0.72rem; padding: 0.3rem 0.75rem; border-radius: 100px; background: var(--white); border: 1px solid var(--stone); color: #475569; }
+    
+    /* ── Grants & Awards ── */
+    .awards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--stone);
+    border: 1px solid var(--stone);
+    border-radius: 8px;
+    overflow: hidden;
+    }
+    .award-cell {
+      background: var(--paper);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: background 0.2s;
+    }
+    .award-cell:hover { background: var(--rust-light); }
+    .award-icon { font-size: 1.4rem; flex-shrink: 0; padding-top: 2px; }
+    .award-name { font-size: 0.92rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .award-org { font-size: 0.78rem; color: var(--mist); }
+    @media (max-width: 640px) { .awards-grid { grid-template-columns: 1fr; } }
+
+    /* ── SECTION HEADING ── */
+    .section-eyebrow { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rust); display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.5rem; }
+    .section-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--rust); }
+    .section-heading { font-family: var(--ff-display); font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 200; line-height: 1.1; margin-bottom: 2.5rem; }
+    .section-heading em { font-style: italic; color: var(--mist); }
+
+    /* ── FOOTER ── */
+    footer { padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem); border-top: 1px solid var(--stone); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .footer-sign { font-family: var(--ff-display); font-size: 0.95rem; font-weight: 300; font-style: italic; color: var(--mist); }
+    .footer-links { display: flex; gap: 1.75rem; }
+    .footer-links a { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-copy { font-size: 0.72rem; color: var(--mist); }
+
+    /* ── REVEAL ── */
+    [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+    [data-reveal].revealed { opacity: 1; transform: none; }
+    [data-reveal][data-delay="1"] { transition-delay: 0.1s; }
+    [data-reveal][data-delay="2"] { transition-delay: 0.2s; }
+    [data-reveal][data-delay="3"] { transition-delay: 0.3s; }
+
+    @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; } .about-photo { max-width: 280px; } }
+    @media (max-width: 640px) { .edu-row, .exp-row { grid-template-columns: 1fr; gap: 0.5rem; } .pub-row { grid-template-columns: 24px 1fr; } .pub-year { display: none; } .skills-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <div class="nav-links">
+      <a href="index.html">Work</a>
+      <a href="about.html" class="active">About</a>
+      <a href="publications.html">Publications</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank" class="nav-resume">Resume</a>
+    </div>
+  </nav>
+
+  <!-- ABOUT -->
+  <div class="about-hero">
+    <div class="about-grid">
+      <div class="about-photo" data-reveal>
+        <img src="assets/about.jpg" alt="Yeeun Kim">
+        <p class="about-photo-cap">Penn State University · University Park, PA</p>
+      </div>
+      <div>
+        <p class="about-eyebrow" data-reveal>About</p>
+        <h1 class="about-heading" data-reveal data-delay="1">Bridging <em>behavior</em><br>and <em>design</em></h1>
+        <div class="about-body" data-reveal data-delay="2">
+          <p>I'm <strong>Yeeun Kim (Ruby)</strong>, a Ph.D. Candidate in Industrial Engineering at Penn State University. I specialize in mixed-methods UX and human factors research — the kind that goes beyond preference surveys to understand <strong>how people actually think and behave</strong>.</p>
+          <p>I've led studies with over <strong>1,700 participants</strong> across consumer platforms (Booking.com), AI-driven health applications (HAII Corporation), and safety-critical systems sponsored by <strong>General Motors</strong> and the <strong>AAA Foundation for Traffic Safety</strong>.</p>
+          <p>My research examines cognitive workload, mental models, decision-making, and trust — translating complex behavioral data into design recommendations that are both evidence-based and actionable.</p>
+        </div>
+        <div class="chips" data-reveal data-delay="3">
+          <a href="mailto:yjk5202@psu.edu" class="chip">✉ yjk5202@psu.edu</a>
+          <a href="tel:+18143212364" class="chip">📞 814-321-2364</a>
+          <a href="https://linkedin.com/in/yeeun--kim" target="_blank" class="chip">in LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num" data-count="1700">0</div>
+        <div class="lbl">Study Participants</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num" data-count="4">0</div>
+        <div class="lbl">Publications</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num" data-count="5">0</div>
+        <div class="lbl">Research Projects</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num" data-count="3">0</div>
+        <div class="lbl">Industry Partners</div>
+      </div>
+    </div>
+  </div>
+<!-- ═══════════════════════════════════════
+       MARQUEE
+  ════════════════════════════════════════ -->
+  <div class="marquee-band" aria-hidden="true">
+    <div class="marquee-inner">
+      <!-- Repeated twice for seamless loop -->
+      <span class="marquee-item">UX Research <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">UX Design <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Human Factors <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Mixed Methods <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Cognitive Science <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">HCI <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Qualitative/Quantitative Research <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Figma <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Eye Tracking <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Driving Simulators <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">VR Research <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">AI Systems <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Penn State PhD <span class="marquee-dot">●</span></span>
+
+      <span class="marquee-item">UX Research <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">UX Design <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Human Factors <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Mixed Methods <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Cognitive Science <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">HCI <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Qualitative/Quantitative Research <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Figma <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Eye Tracking <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Driving Simulators <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">VR Research <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">AI Systems <span class="marquee-dot">●</span></span>
+      <span class="marquee-item">Penn State PhD <span class="marquee-dot">●</span></span>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="wrap">
+    <section class="section" data-reveal>
+      <p class="section-eyebrow">Education</p>
+      <div class="edu-rows">
+        <div class="edu-row">
+          <p class="edu-year">2022 – Present</p>
+          <div>
+            <p class="edu-deg">Ph.D. Industrial Engineering</p>
+            <p class="edu-school">Pennsylvania State University</p>
+            <p class="edu-note">Concentration: Human Factors</p>
+            <p class="edu-note">Advisor: Dr. Yiqi Zhang</p>
+          </div>
+        </div>
+        <div class="edu-row">
+          <p class="edu-year">2020 – 2022</p>
+          <div>
+            <p class="edu-deg">M.S. Information & Industrial Engineering</p>
+            <p class="edu-school">University of Michigan, Ann Arbor</p>
+            <p class="edu-note">Concentration: Human-Computer Interaction</p>
+            <p class="edu-note">Advisors: Dr. Xi Jessie Yang, Michael Nebeling</p> 
+          </div>
+        </div>
+        <div class="edu-row">
+          <p class="edu-year">2014 – 2018</p>
+          <div>
+            <p class="edu-deg">B.S. Business Administration</p>
+            <p class="edu-school">Kookmin University, Seoul</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="section" data-reveal>
+      <p class="section-eyebrow">Work Experience</p>
+      <div class="exp-rows">
+        <div class="exp-row">
+          <div class="exp-meta">
+            <p class="exp-company">HAII Corp.</p>
+            <p class="exp-period">Aug 2019 – Aug 2020</p>
+            <p class="exp-location">Seoul, South Korea</p>
+          </div>
+          <div>
+            <h3 class="exp-role">UX Designer/Researcher</h3>
+            <ul class="exp-bullets">
+              <li>Researched SAEMI, a health AI chatbot for cognitive health support, using qualitative methods to identify pain points and inform a full user flow redesign.</li>
+              <li>Collaborated cross-functionally from experimental design through product launch, translating behavioral insights into UX improvements for older adults.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exp-row">
+          <div class="exp-meta">
+            <p class="exp-company">Booking.com</p>
+            <p class="exp-period">Jun 2018 – Aug 2019</p>
+            <p class="exp-location">Seoul, South Korea</p>
+          </div>
+          <div>
+            <h3 class="exp-role">UX Researcher</h3>
+            <ul class="exp-bullets">
+              <li>Conducted mixed-methods UX research to analyze user behavior and validate needs across a large-scale online consumer booking platform.</li>
+              <li>Partnered with product managers, designers, and engineers to translate research findings into actionable recommendations.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PUBLICATIONS -->
+    <section class="section" data-reveal>
+      <p class="section-eyebrow">Publications</p>
+      <div class="pub-rows">
+        <div class="pub-row">
+          <p class="pub-n">01</p>
+          <div>
+            <span class="pub-venue">HFES 2026 · Accepted</span>
+            <p class="pub-title">Enhancing ADAS Training: Examining the Effects of Training Styles and Modes on Driver Knowledge and Decision-Making</p>
+            <p class="pub-authors"><span>Kim, R. Y.,</span> & Zhang, Y. (2026). Human Factors and Ergonomics Society Annual Meeting.</p>
+          </div>
+          <p class="pub-year">2026</p>
+        </div>
+        <div class="pub-row">
+          <p class="pub-n">02</p>
+          <div>
+            <span class="pub-venue">Transportation Research Record</span>
+            <p class="pub-title"><a href="https://doi.org/10.1177/03611981261431732" target="_blank">Training Drivers in Advanced Driver Assistance Systems: How Training Content Shapes Driver Knowledge, Decision-Making, and Performance</a></p>
+            <p class="pub-authors"><span>Kim, R. Y.,</span> & Zhang, Y. (2026). Transportation Research Record.</p>
+          </div>
+          <p class="pub-year">2026</p>
+        </div>
+        <div class="pub-row">
+          <p class="pub-n">03</p>
+          <div>
+            <span class="pub-venue">AAA Foundation Technical Report</span>
+            <p class="pub-title"><a href="https://trid.trb.org/View/2551052" target="_blank">Effects of Training Content and Approach on Drivers' Understanding of and Performance with Advanced Driver Assistance Systems</a></p>
+            <p class="pub-authors">Zhang, Y., <span>Kim, R. Y.,</span> & Brennan, S. (2025). AAA Foundation for Traffic Safety.</p>
+          </div>
+          <p class="pub-year">2025</p>
+        </div>
+        <div class="pub-row">
+          <p class="pub-n">04</p>
+          <div>
+            <span class="pub-venue">ASME IDETC/CIE 2024</span>
+            <p class="pub-title"><a href="https://doi.org/10.1115/DETC2024-146368" target="_blank">Exploring the Use of Immersive VR for Human-Robot Collaboration in Construction: An Interview Study</a></p>
+            <p class="pub-authors"><span>Kim, R. Y.,</span> Cai, J., Chandran, S., Liu, J., Peng, A., & Miller, S. R. (2024). ASME.</p>
+          </div>
+          <p class="pub-year">2024</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" data-reveal>
+      <p class="section-eyebrow">Skills & Toolkit</p>
+      <div class="skills-grid">
+        <div>
+          <p class="skill-cat-name">🔬 Research Methods</p>
+          <div class="skill-pills">
+            <span class="skill-pill">Design of Experiments</span>
+            <span class="skill-pill">User Interviews</span>
+            <span class="skill-pill">Contextual Inquiry</span>
+            <span class="skill-pill">Focus Groups</span>
+            <span class="skill-pill">Field Studies</span>
+            <span class="skill-pill">Co-Design Workshops</span>
+            <span class="skill-pill">Usability Testing</span>
+            <span class="skill-pill">Prototype Testing</span>
+            <span class="skill-pill">A/B Testing</span>
+            <span class="skill-pill">Eye-Tracking</span>
+            <span class="skill-pill">Survey</span>
+          </div>
+        </div>
+        <div>
+          <p class="skill-cat-name">📊 Analysis</p>
+          <div class="skill-pills">
+            <span class="skill-pill">ANOVA</span>
+            <span class="skill-pill">T-Tests</span>
+            <span class="skill-pill">Regression</span>
+            <span class="skill-pill">Qualitative Coding</span>
+            <span class="skill-pill">Research Analysis</span>
+            <span class="skill-pill">Research Synthesis</span>
+            <span class="skill-pill">SPSS</span>
+            <span class="skill-pill">R</span>
+            <span class="skill-pill">Python</span>
+            <span class="skill-pill">Data Visualization</span>
+          </div>
+        </div>
+        <div>
+          <p class="skill-cat-name">🎨 Design & Tools</p>
+          <div class="skill-pills">
+            <span class="skill-pill">Figma</span>
+            <span class="skill-pill">Adobe XD</span>
+            <span class="skill-pill">Photoshop</span>
+            <span class="skill-pill">Illustrator</span>
+            <span class="skill-pill">Unity</span>
+            <span class="skill-pill">Premiere Pro</span>
+            <span class="skill-pill">VR Interface Design</span>
+            <span class="skill-pill">JavaScript</span>
+          </div>
+        </div>
+        <div>
+          <p class="skill-cat-name">📢 Communication</p>
+          <div class="skill-pills">
+            <span class="skill-pill">Research Reporting</span>
+            <span class="skill-pill">Stakeholder Presentation</span>
+            <span class="skill-pill">Technical Writing</span>
+            <span class="skill-pill">Cross-functional Collaboration</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- Gransts & Awards -->
+  <section class="section" data-reveal>
+    <div class="wrap">
+      <p class="section-eyebrow">Grants & Awards</p>
+      <div class="awards-grid">
+        <div class="award-cell">
+          <span class="award-icon">🏆</span>
+          <div>
+            <p class="award-name">ITE Travel Grant — $490</p>
+            <p class="award-org">Institute of Transportation Engineers · Penn State · 2026</p>
+          </div>
+        </div>
+        <div class="award-cell">
+          <span class="award-icon">🏆</span>
+          <div>
+            <p class="award-name">Larson Transportation Institute Travel Grant — $500</p>
+            <p class="award-org">Pennsylvania State University · 2026</p>
+          </div>
+        </div>
+        <div class="award-cell">
+          <span class="award-icon">🎓</span>
+          <div>
+            <p class="award-name">IOE Departmental Fellowship</p>
+            <p class="award-org">University of Michigan · 2021–2022</p>
+          </div>
+        </div>
+        <div class="award-cell">
+          <span class="award-icon">💡</span>
+          <div>
+            <p class="award-name">Research Experience for Master's Students — $10,000</p>
+            <p class="award-org">University of Michigan · 2021</p>
+          </div>
+        </div>
+      </div>  
+    </div>
+</section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-sign">Let's make connection.</p>
+    <div class="footer-links">
+      <a href="mailto:yjk5202@psu.edu">Email</a>
+      <a href="https://linkedin.com/in/yeeun--kim" target="_blank">LinkedIn</a>
+      <a href="index.html">Work</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank">Resume</a>
+    </div>
+    <p class="footer-copy">© 2026 Yeeun Kim</p>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('[data-reveal]').forEach(el => {
+      obs.observe(el);
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('revealed');
+    });
+
+    function animateCount(el, target, suffix = '') {
+      let start = 0;
+      const dur = 1800, step = 16, inc = target / (dur / step);
+      const timer = setInterval(() => {
+        start += inc;
+        if (start >= target) { start = target; clearInterval(timer); }
+        el.textContent = (target >= 100 ? Math.round(start).toLocaleString() : Math.round(start)) + suffix;
+      }, step);
+      }
+    const countObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const target = parseInt(e.target.dataset.count);
+          const suffix = target >= 1000 ? '+' : '';
+          animateCount(e.target, target, suffix);
+          countObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-count]').forEach(el => countObs.observe(el));
+  </script>
+</body>
+</html>

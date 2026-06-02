@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yeeun Kim — UX Researcher & Designer</title>
+  <link rel="icon" type="image/png" href="yk-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink:        #0F172A;
+      --paper:      #FFFFFF;
+      --rust:       #1E54B7;
+      --rust-light: #DBEAFE;
+      --rust-mid:   #5B8DEF;
+      --sage:       #0EA5E9;
+      --stone:      #E8EFFC;
+      --mist:       #94A3B8;
+      --white:      #F8FAFF;
+      --ff-display: 'Fraunces', Georgia, serif;
+      --ff-body:    'Instrument Sans', sans-serif;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--ff-body); background: var(--paper); color: var(--ink);
+           line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      padding: 1.25rem clamp(1.5rem, 5vw, 4rem);
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(255,255,255,0.94); backdrop-filter: blur(16px);
+      /* border-bottom: 1px solid var(--stone); */
+    }
+    .nav-logo {
+      font-family: var(--ff-display); font-size: 1rem;
+      font-weight: 600; font-style: italic; letter-spacing: 0.02em;
+    }
+    .nav-logo em { font-style: italic; font-weight: 600; }
+    .nav-logo span { font-style: normal; color: var(--rust); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+    .nav-resume {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--rust);
+      border: 1px solid var(--stone); padding: 0.35rem 1rem;
+      border-radius: 100px; transition: background 0.2s, color 0.2s;
+    }
+    .nav-resume:hover { background: var(--rust); color: white; }
+
+    /* ── HERO (minimal) ── */
+    .hero {
+      padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem);
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap;
+    }
+    .hero-left {}
+    .hero-name {
+      font-family: var(--ff-display);
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 600; line-height: 1; letter-spacing: -0.03em;
+    }
+    .hero-name em { font-style: normal; }
+    .hero-name span { font-style: italic; color: var(--rust); }
+    .hero-role {
+      font-size: 0.82rem; font-weight: 400; color: var(--mist);
+      margin-top: 0.75rem; letter-spacing: 0.02em;
+    }
+    .hero-right {text-align: right; }
+    .hero-avail {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s var(--ease-out) forwards;
+    }
+    .hero-avail::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--sage);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    /* ─────────────────────────────────────────────
+       CUSTOM CURSOR
+    ───────────────────────────────────────────── */
+    .cursor-dot, .cursor-ring {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition-property: opacity;
+      transition-duration: 0.3s;
+    }
+    .cursor-dot {
+      width: 6px; height: 6px;
+      background: var(--rust);
+      top: 0; left: 0;
+    }
+    .cursor-ring {
+      width: 32px; height: 32px;
+      border: 1.5px solid var(--rust);
+      top: 0; left: 0;
+      transition: width 0.3s var(--ease-out),
+                  height 0.3s var(--ease-out),
+                  border-color 0.3s,
+                  background 0.3s;
+    }
+    .cursor-ring.hover {
+      width: 50px; height: 50px;
+      background: rgba(191, 74, 42, 0.08);
+      border-color: var(--rust);
+    }
+    @media (hover: none) {
+      .cursor-dot, .cursor-ring { display: none; }
+      body { cursor: auto; }
+    }
+    /* ── PROJECT GRID ── */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 700px);
+      gap: 2px;
+      background: var(--stone);
+      max-width: 1402px;
+      margin: 0 auto;
+    }
+    .proj-card {
+      background: var(--paper); width: 700px;
+      display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
+      overflow: hidden; transition: background 0.25s;
+    }
+    .proj-card:hover { background: var(--white); }
+    .proj-card-image {
+      width: 100%; height: 420px;
+      overflow: hidden; position: relative; flex-shrink: 0;
+    }
+    .proj-card-image img,
+    .proj-card-image svg {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.55s var(--ease-out);
+    }
+    .proj-card:hover .proj-card-image img { transform: scale(1.04); }
+    .proj-card-body {
+      padding: 1.4rem 1.75rem 2rem;
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .proj-card-meta {
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist);
+    }
+    .proj-card-title {
+      font-family: var(--ff-display);
+      font-size: 1.2rem; font-weight: 300; line-height: 1.2; color: var(--ink);
+      transition: color 0.2s;
+    }
+    .proj-card:hover .proj-card-title { color: var(--rust); }
+    .proj-card-desc { font-size: 0.83rem; color: var(--mist); line-height: 1.6; }
+    .proj-card-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.3rem; }
+    .proj-card-tag {
+      font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 0.18rem 0.5rem;
+      border-radius: 100px; background: var(--stone); color: var(--mist);
+    }
+    /* ── Clickable image col ── */
+    a.proj-image-col {
+      display: block;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    /* ── ROLE ROTATOR ── */
+    .hero-role-wrap {
+      display: flex; align-items: center; gap: 0.5rem;
+      margin-top: 0.75rem; flex-wrap: wrap;
+    }
+    /* .hero-role-sep { width: 1px; height: 1em; background: var(--stone); flex-shrink: 0; } */
+    .hero-role-sep { width: 40px; height: 1px; background: var(--mist); }
+    .hero-role-text { font-style: italic; font-size: 0.82rem; font-weight: 400; color: var(--ink); }
+    .role-rotator { overflow: hidden; height: 1.25em; display: inline-flex; align-items: flex-start; }
+    .role-rotator-inner {
+      display: flex; flex-direction: column;
+      animation: rotateRoles 4.5s cubic-bezier(0.76,0,0.24,1) infinite;
+    }
+    .role-rotator-inner span {
+      display: block;
+      height: 1.2em;
+      line-height: 1.2;
+      color: var(--rust);
+      font-style: normal;
+      font-weight: 600;
+    }
+    @keyframes rotateRoles {
+      0%, 28%  { transform: translateY(0); }
+      33%, 61% { transform: translateY(-33.33%); }
+      66%, 94% { transform: translateY(-66.66%); }
+      100%     { transform: translateY(0); }
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+    }
+
+    #contact {
+      background: var(--ink);
+      color: var(--white);
+      padding: clamp(6rem, 14vw, 12rem) 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-watermark {
+      position: absolute;
+      font-family: var(--ff-display);
+      font-size: clamp(10rem, 24vw, 22rem);
+      font-weight: 200;
+      font-style: italic;
+      color: rgba(255,255,255,0.025);
+      bottom: -2rem; left: -2rem;
+      line-height: 1;
+      pointer-events: none;
+      letter-spacing: -0.04em;
+      user-select: none;
+    }
+    .contact-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4rem;
+      align-items: start;
+      margin-bottom: 5rem;
+    }
+    @media (max-width: 760px) { .contact-top { grid-template-columns: 1fr; } }
+    .contact-heading {
+      font-family: var(--ff-display);
+      font-size: clamp(2.8rem, 7vw, 7rem);
+      font-weight: 200;
+      line-height: 1;
+    }
+    .contact-heading em { font-style: italic; color: var(--rust-mid); }
+    .contact-sub {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.649);
+      line-height: 1.75;
+      max-width: 450px;
+      margin-top: 1.5rem;
+    }
+    .contact-detail-link {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.649);
+      transition: color 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .contact-detail-link:hover { color: var(--rust-mid); }
+    .contact-cta-block {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding-top: 0.5rem;
+    }
+    .btn-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.8rem;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: 0.25s;
+      cursor: none;
+      white-space: nowrap;
+    }
+    .btn-contact-primary {
+      background: var(--rust);
+      color: var(--white);
+      border: 1.5px solid var(--rust);
+    }
+    .btn-contact-primary:hover { background: transparent; }
+    .btn-contact-outline {
+      border: 1.5px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.6);
+    }
+    .btn-contact-outline:hover {
+      border-color: rgba(255,255,255,0.6);
+      color: var(--white);
+    }
+    .footer-copy {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 760px) {
+      .proj-grid { grid-template-columns: 1fr; }
+      .proj-card { width: 100%; }
+      .hero { flex-direction: column; align-items: flex-start; }
+      .hero-right { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Work</a>
+      <a href="about.html">About</a>
+      <a href="publications.html">Publications</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank" class="nav-resume">Resume</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-left">
+      <h1 class="hero-name"><span>Yeeun</span> <em>Kim</em></h1>
+      <div class="hero-role-wrap">
+        <div class="hero-role-sep"></div>
+        <span class="hero-role-text">Ph.D. Candidate &amp;</span>
+        <div class="role-rotator">
+          <div class="role-rotator-inner">
+            <span>UX Designer</span>
+            <span>UX Researcher</span>
+            <span>Human Factors Engineer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <p class="hero-avail">Available for UX / Human Factors roles</p>
+    </div>
+  </header>
+
+  <!-- PROJECT GRID -->
+  <main>
+    <div class="proj-grid">
+
+      <!-- Cabby -->
+      <a href="project-cabby.html" class="proj-card">
+        <div class="proj-card-image" style="background:#0B1B3A;">
+          <img src="assets/cabby/Intro.jpg" alt="Cabby — Self-Driving Taxi UX">
+        </div>
+        <div class="proj-card-body">
+          <p class="proj-card-meta">Product Design · UX/UI Interface Design</p>
+          <h3 class="proj-card-title">Cabby — Self-Driving Taxi UX/UI Interface Design</h3>
+          <p class="proj-card-desc">Full passenger experience across mobile app, interface design, and exterior LED design for a self-driving taxi.</p>
+          <div class="proj-card-tags">
+            <span class="proj-card-tag">UX Design</span>
+            <span class="proj-card-tag">UX Research</span>
+            <span class="proj-card-tag">Figma</span>
+            <span class="proj-card-tag">Adobe Illustrator</span>
+            <span class="proj-card-tag">Autonomous Vehicle</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Matnajang -->
+      <a href="project-matnajang.html" class="proj-card">
+        <div class="proj-card-image" style="background:#4A3285;">
+          <img src="assets/matnajang/matnajang.png" alt="Matnajang">
+        </div>
+        <div class="proj-card-body">
+          <p class="proj-card-meta"> Product Design · Mobile Interface Design</p>
+          <h3 class="proj-card-title">Matnajang —  A Platform Connecting Restaurants and Grocery Suppliers</h3>
+          <p class="proj-card-desc"> Mobile application  which aims to enhance profit for both the restaurants and grocery suppliers</p>
+          <div class="proj-card-tags">
+            <span class="proj-card-tag">UX Design</span>
+            <span class="proj-card-tag">UX Research</span>
+            <span class="proj-card-tag">Product Design</span>
+            <span class="proj-card-tag">Adobe XD</span>
+            <span class="proj-card-tag">Adobe Illustrator</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Strescape -->
+      <a href="project-strescape.html" class="proj-card">
+        <div class="proj-card-image" style="background:#4A3285;">
+          <img src="assets/strescape/card-image.jpg" alt="Strescape">
+        </div>
+        <div class="proj-card-body">
+          <p class="proj-card-meta"> Product Design · Game Design · ACM-CHI</p>
+          <h3 class="proj-card-title">Strescape — Gamifying Stress Management</h3>
+          <p class="proj-card-desc">Mobile escape room game helping high school students recognize and manage stress through mindfulness.</p>
+          <div class="proj-card-tags">
+            <span class="proj-card-tag">UX Research</span>
+            <span class="proj-card-tag">UX Design</span>
+            <span class="proj-card-tag">Game Design</span>
+            <span class="proj-card-tag">Adobe XD</span>
+            <span class="proj-card-tag">Adobe Illustrator</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- SAEMI -->
+      <a href="project-saemi.html" class="proj-card">
+        <div class="proj-card-image" style="background:#0D7A5F;">
+          <img src="assets/saemi.png" alt="SAEMI">
+        </div>
+        <div class="proj-card-body">
+          <p class="proj-card-meta"> Product Design · Re-Branding</p>
+          <h3 class="proj-card-title">SAEMI — Digital Therapeutics AI Companion</h3>
+          <p class="proj-card-desc">Rebranded and redesigned UI for an AI chatbot targeting elders with cognitive health needs. Rebranding drove a 200% user increase.</p>
+          <div class="proj-card-tags">
+            <span class="proj-card-tag">UX Design</span>
+            <span class="proj-card-tag">UX Research</span>
+            <span class="proj-card-tag">Re-Branding</span>
+            <span class="proj-card-tag">Web/Mobile Interface Design</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- MOTD -->
+      <a href="project-motd.html" class="proj-card">
+        <div class="proj-card-image" style="background:#1A3A5C;">
+          <img src="assets/motd/hero.png" alt="MOTD" style="object-fit:contain;">
+        </div>
+        <div class="proj-card-body">
+          <p class="proj-card-meta">UX/UI Design · Product Design</p>
+          <h3 class="proj-card-title">MOTD — Mobility of the Day</h3>
+          <p class="proj-card-desc">AI-powered app recommending personalized mobility routes based on user emotions and personality.</p>
+          <div class="proj-card-tags">
+            <span class="proj-card-tag">UX Design</span>
+            <span class="proj-card-tag">UX Research</span>
+            <span class="proj-card-tag">AI Service</span>
+            <span class="proj-card-tag">Branding</span>
+            <span class="proj-card-tag">Mobile App Interface Design</span>
+          </div>
+        </div>
+      </a>
+      <!-- Map It! -->
+      <a href="project-mapit.html" class="proj-card">
+        <div class="proj-card-image" style="background:#2A6B5A;">
+          <img src="assets/mapit/hero.gif" alt="Map It!">
+        </div>
+        <div class="proj-card-body">
+          <p class="proj-card-meta">UX Design & Research · Makeathon</p>
+          <h3 class="proj-card-title">Map It! — Family Location Tracking Puzzle</h3>
+          <p class="proj-card-desc">Physical interactive Lego puzzle with GPS tracking, designed for families to build neighborhood maps and ensure children's safety.</p>
+          <div class="proj-card-tags">
+            <span class="proj-card-tag">Product Design</span>
+            <span class="proj-card-tag">Prototyping</span>
+            <span class="proj-card-tag">Mobile App</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- LLM Driving -->
+      <!-- <a href="project-llm-driving.html" class="proj-card">
+        <div class="proj-card-image" style="background:#D8E8FC;">
+          <svg viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="600" height="450" fill="#D8E8FC"/><defs><radialGradient id="ga1" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#1E54B7" stop-opacity="0.25"/><stop offset="100%" stop-color="#1E54B7" stop-opacity="0"/></radialGradient></defs><circle cx="300" cy="225" r="170" fill="url(#ga1)"/><circle cx="300" cy="225" r="18" fill="none" stroke="#1E54B7" stroke-width="1.5"/><circle cx="180" cy="145" r="10" fill="none" stroke="#1E54B7" stroke-width="1"/><circle cx="420" cy="145" r="10" fill="none" stroke="#1E54B7" stroke-width="1"/><circle cx="150" cy="265" r="10" fill="none" stroke="#1E54B7" stroke-width="1"/><circle cx="450" cy="265" r="10" fill="none" stroke="#1E54B7" stroke-width="1"/><line x1="300" y1="207" x2="186" y2="153" stroke="#1E54B7" stroke-width="0.8" opacity="0.5"/><line x1="300" y1="207" x2="414" y2="153" stroke="#1E54B7" stroke-width="0.8" opacity="0.5"/><line x1="300" y1="243" x2="158" y2="263" stroke="#1E54B7" stroke-width="0.8" opacity="0.5"/><line x1="300" y1="243" x2="442" y2="263" stroke="#1E54B7" stroke-width="0.8" opacity="0.5"/><text x="300" y="400" text-anchor="middle" font-size="9" fill="rgba(30,84,183,0.35)" font-family="sans-serif" letter-spacing="3">LLM · DRIVING TRAINING</text></svg>
+        </div>
+        <div class="proj-card-body">
+          <p class="proj-card-meta">Research · Penn State · 2023–2024</p>
+          <h3 class="proj-card-title">LLM-Powered Driving Training Interface</h3>
+          <p class="proj-card-desc">Designed and evaluated an LLM-based conversational interface for ADAS driver training.</p>
+          <div class="proj-card-tags">
+            <span class="proj-card-tag">LLM</span>
+            <span class="proj-card-tag">ADAS</span>
+            <span class="proj-card-tag">UX Research</span>
+          </div>
+        </div>
+      </a> -->
+
+      <!-- ADAS -->
+      <!-- <a href="project-adas.html" class="proj-card">
+        <div class="proj-card-image" style="background:#EFF4FF;">
+          <svg viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="600" height="450" fill="#EFF4FF"/><rect x="150" y="155" width="300" height="160" rx="12" fill="none" stroke="rgba(30,84,183,0.4)" stroke-width="2"/><line x1="150" y1="195" x2="450" y2="195" stroke="rgba(30,84,183,0.2)" stroke-width="1"/><circle cx="220" cy="295" r="30" fill="none" stroke="rgba(30,84,183,0.5)" stroke-width="1.5"/><circle cx="380" cy="295" r="30" fill="none" stroke="rgba(30,84,183,0.5)" stroke-width="1.5"/><text x="300" y="400" text-anchor="middle" font-size="9" fill="rgba(30,84,183,0.3)" font-family="sans-serif" letter-spacing="3">ADAS TRAINING STUDY</text></svg>
+        </div>
+        <div class="proj-card-body">
+          <p class="proj-card-meta">Research · AAA Foundation · 2023–2025</p>
+          <h3 class="proj-card-title">ADAS Driver Training Study</h3>
+          <p class="proj-card-desc">Large-scale study examining how training content shapes driver knowledge, decision-making, and performance.</p>
+          <div class="proj-card-tags">
+            <span class="proj-card-tag">ADAS</span>
+            <span class="proj-card-tag">Human Factors</span>
+            <span class="proj-card-tag">Published</span>
+          </div>
+        </div>
+      </a> -->
+
+      <!-- GM HUD -->
+      <!-- <a href="project-gm-hud.html" class="proj-card">
+        <div class="proj-card-image" style="background:#E8F0FB;">
+          <svg viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="600" height="450" fill="#E8F0FB"/><ellipse cx="300" cy="225" rx="200" ry="80" fill="none" stroke="rgba(30,84,183,0.3)" stroke-width="1.5"/><ellipse cx="300" cy="225" rx="140" ry="55" fill="none" stroke="rgba(30,84,183,0.4)" stroke-width="1"/><rect x="260" y="200" width="80" height="50" rx="4" fill="none" stroke="rgba(30,84,183,0.6)" stroke-width="1.5"/><text x="300" y="400" text-anchor="middle" font-size="9" fill="rgba(30,84,183,0.3)" font-family="sans-serif" letter-spacing="3">N=1,500 · 33 HUD DESIGNS</text></svg>
+        </div>
+        <div class="proj-card-body">
+          <p class="proj-card-meta">Research · General Motors · N=1,500</p>
+          <h3 class="proj-card-title">Driver Comprehension of HUD Warning Interfaces</h3>
+          <p class="proj-card-desc">Evaluated how HUD design elements affect driver comprehension. Delivered at GM engineering and executive level.</p>
+          <div class="proj-card-tags">
+            <span class="proj-card-tag">HUD</span>
+            <span class="proj-card-tag">A/B Testing</span>
+            <span class="proj-card-tag">MTurk</span>
+          </div>
+        </div>
+      </a> -->
+
+      <!-- VR Learning -->
+      <!-- <a href="project-vr-learning.html" class="proj-card">
+        <div class="proj-card-image" style="background:#D5E5F8;">
+          <svg viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="600" height="450" fill="#D5E5F8"/><rect x="230" y="185" width="140" height="70" rx="20" fill="none" stroke="rgba(14,165,233,0.8)" stroke-width="2"/><circle cx="265" cy="220" r="18" fill="none" stroke="rgba(14,165,233,0.6)" stroke-width="1.5"/><circle cx="335" cy="220" r="18" fill="none" stroke="rgba(14,165,233,0.6)" stroke-width="1.5"/><line x1="283" y1="220" x2="317" y2="220" stroke="rgba(14,165,233,0.5)" stroke-width="1"/><text x="300" y="400" text-anchor="middle" font-size="9" fill="rgba(14,165,233,0.4)" font-family="sans-serif" letter-spacing="3">VR LEARNING · CO-DESIGN</text></svg>
+        </div>
+        <div class="proj-card-body">
+          <p class="proj-card-meta">Research · University of Michigan</p>
+          <h3 class="proj-card-title">VR Learning Design for Spatial Computing</h3>
+          <p class="proj-card-desc">Co-design workshops investigating how environmental settings shape instructors' teaching experience in immersive VR.</p>
+          <div class="proj-card-tags">
+            <span class="proj-card-tag">VR / XR</span>
+            <span class="proj-card-tag">Co-Design</span>
+            <span class="proj-card-tag">Qualitative</span>
+          </div>
+        </div>
+      </a> -->
+
+      <!-- VR Construction -->
+      <!-- <a href="project-vr-construction.html" class="proj-card">
+        <div class="proj-card-image" style="background:#D5E0FA;">
+          <svg viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="600" height="450" fill="#D5E0FA"/><g stroke="rgba(30,84,183,0.6)" stroke-width="1.5" fill="none"><rect x="270" y="335" width="60" height="20" rx="2" fill="rgba(30,84,183,0.15)"/><line x1="300" y1="335" x2="300" y2="275"/><line x1="300" y1="275" x2="360" y2="215"/><line x1="360" y1="215" x2="400" y2="165"/><circle cx="300" cy="275" r="8" fill="rgba(30,84,183,0.2)"/><circle cx="360" cy="215" r="8" fill="rgba(30,84,183,0.2)"/><circle cx="400" cy="165" r="6" fill="rgba(30,84,183,0.2)"/><circle cx="180" cy="185" r="14" stroke="rgba(30,84,183,0.4)" stroke-width="1"/><line x1="180" y1="199" x2="180" y2="255"/><path d="M210,215 Q290,175 370,185" stroke="rgba(30,84,183,0.3)" stroke-width="1" stroke-dasharray="4 4"/></g><text x="300" y="400" text-anchor="middle" font-size="9" fill="rgba(30,84,183,0.3)" font-family="sans-serif" letter-spacing="3">881 CODED · NVIVO 14</text></svg>
+        </div>
+        <div class="proj-card-body">
+          <p class="proj-card-meta">Research · Penn State · 2023–2024</p>
+          <h3 class="proj-card-title">VR Training for Human-Robot Collaboration</h3>
+          <p class="proj-card-desc">Expert interviews + NVivo coding + Figma prototypes for a VR construction robot training interface on Oculus Quest 2.</p>
+          <div class="proj-card-tags">
+            <span class="proj-card-tag">VR / Oculus</span>
+            <span class="proj-card-tag">NVivo 14</span>
+            <span class="proj-card-tag">HRI</span>
+          </div>
+        </div>
+      </a> -->
+
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════
+       CONTACT
+  ════════════════════════════════════════ -->
+  <section id="contact">
+    <div class="contact-watermark">Hello</div>
+    <div class="wrap">
+      <div class="contact-top">
+        <div data-reveal>
+          <p class="eyebrow" style="color:var(--rust-mid); margin-bottom:1.5rem;">Let's work together</p>
+          <h2 class="contact-heading">
+            Open to<br><em>opportunities</em>
+          </h2>
+          <p class="contact-sub">Interested in UX research, human factors, and product design roles. Always happy to start a conversation.</p>
+          <div class="contact-detail-links" style="margin-top:2rem; display:flex; flex-direction:column; gap:0.6rem;">
+            <a href="mailto:yjk5202@psu.edu" class="contact-detail-link">✉ yjk5202@psu.edu</a>
+            <a href="tel:+18143212364" class="contact-detail-link">✆ +1 814-321-2364</a>
+            <a href="https://www.linkedin.com/in/yeeun--kim" target="_blank" rel="noopener" class="contact-detail-link">in linkedin.com/in/yeeun--kim</a>
+          </div>
+        </div>
+        <div class="contact-cta-block" data-reveal data-delay="2">
+          <a href="mailto:yjk5202@psu.edu" class="btn-contact btn-contact-primary">
+            Send an email →
+          </a>
+          <a href="https://www.linkedin.com/in/yeeun--kim/" target="_blank" rel="noopener" class="btn-contact btn-contact-outline">
+            View LinkedIn
+          </a>
+          <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank" class="btn-contact btn-contact-outline">
+            Download CV ↓
+          </a>
+        </div>
+      </div>
+        <p class="footer-copy">© 2026 by Yeeun Kim (Ruby)</p>
+      </div>
+    </div>
+  </section>
+   <!-- ═══════════════════════════════════════
+       JAVASCRIPT
+  ════════════════════════════════════════ -->
+  <script>
+    // ── Custom cursor ──────────────────────
+    const dot  = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    window.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left  = mx + 'px';
+      dot.style.top   = my + 'px';
+    });
+
+    // Smooth ring follow
+    (function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    // Hover expand — covers all interactive elements
+    document.querySelectorAll('a, button, .skill-pill, .chip, .award-cell, .pub-row, .project-editorial').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+
+    // ── Hero blob parallax on mousemove ───
+    const heroBlob = document.querySelector('.hero-blob');
+    if (heroBlob) {
+      document.addEventListener('mousemove', e => {
+        const xPct = (e.clientX / window.innerWidth  - 0.5) * 30;
+        const yPct = (e.clientY / window.innerHeight - 0.5) * 20;
+        heroBlob.style.transform = `translate(${xPct}px, ${yPct}px)`;
+      });
+    }
+
+    // ── Scroll progress bar ────────────────
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+      bar.style.width = pct + '%';
+    }, { passive: true });
+
+    // ── Nav on scroll ──────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    // ── Mobile nav ─────────────────────────
+    const burger   = document.getElementById('navBurger');
+    const navLinks = document.getElementById('navLinks');
+    burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // ── Scroll-reveal ──────────────────────
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('revealed');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
+
+    // Immediate reveal for elements in view on load
+    document.querySelectorAll('[data-reveal]').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) el.classList.add('revealed');
+    });
+    </script>
+</body>
+</html>

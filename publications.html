@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publications — Yeeun Kim</title>
+  <link rel="icon" type="image/png" href="yk-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink:        #0F172A;
+      --paper:      #FFFFFF;
+      --rust:       #1E54B7;
+      --rust-light: #DBEAFE;
+      --rust-mid:   #5B8DEF;
+      --sage:       #0EA5E9;
+      --stone:      #E8EFFC;
+      --mist:       #94A3B8;
+      --white:      #F8FAFF;
+      --ff-display: 'Fraunces', Georgia, serif;
+      --ff-body:    'Instrument Sans', sans-serif;
+      --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--ff-body); background: var(--paper); color: var(--ink);
+           line-height: 1.6; -webkit-font-smoothing: antialiased; cursor: none; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── SCROLL PROGRESS ── */
+    #progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: var(--rust); z-index: 9999; transition: width 0.1s linear; }
+
+    /* ── CUSTOM CURSOR ── */
+    .cursor-dot, .cursor-ring { position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition-property: opacity; transition-duration: 0.3s; }
+    .cursor-dot { width: 6px; height: 6px; background: var(--rust); top: 0; left: 0; }
+    .cursor-ring { width: 32px; height: 32px; border: 1.5px solid var(--rust); top: 0; left: 0; transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), border-color 0.3s, background 0.3s; }
+    .cursor-ring.hover { width: 50px; height: 50px; background: rgba(191, 74, 42, 0.08); border-color: var(--rust); }
+    @media (hover: none) { .cursor-dot, .cursor-ring { display: none; } body { cursor: auto; } }
+
+    /* ── NAV ── */
+    nav { position: sticky; top: 0; z-index: 100; padding: 1.25rem clamp(1.5rem, 5vw, 4rem); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.94); backdrop-filter: blur(16px); border-bottom: 1px solid var(--stone); }
+    .nav-logo { font-family: var(--ff-display); font-size: 1rem; font-weight: 300; font-style: italic; }
+    .nav-logo span { font-style: normal; color: var(--rust); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+    .nav-resume { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); border: 1px solid var(--stone); padding: 0.35rem 1rem; border-radius: 100px; transition: background 0.2s, color 0.2s; }
+    .nav-resume:hover { background: var(--rust); color: white; }
+
+    /* ── WRAP ── */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 4rem); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem);
+      border-bottom: 1px solid var(--stone);
+    }
+    .page-header-inner { max-width: 1100px; margin: 0 auto; }
+    .eyebrow { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rust); display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; }
+    .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--rust); display: inline-block; }
+    .page-heading { font-family: var(--ff-display); font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 200; line-height: 1.1; margin-bottom: 1rem; }
+    .page-heading em { font-style: italic; color: var(--rust); }
+    .page-sub { font-size: 0.9rem; color: var(--mist); line-height: 1.75; max-width: 560px; }
+    .page-sub span { font-weight: 600;}
+
+    /* ── PUBLICATIONS ── */
+    .pub-section { padding: clamp(4rem, 8vw, 6rem) 0; }
+    .pub-grid { display: grid; gap: 0; }
+    .pub-row {
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      gap: 1.5rem;
+      padding: 2rem 0;
+      border-top: 1px solid var(--stone);
+      align-items: start;
+      transition: background 0.2s;
+      border-radius: 6px;
+    }
+    .pub-row:last-child { border-bottom: 1px solid var(--stone); }
+    .pub-row:hover { background: rgba(30,84,183,0.04); }
+    .pub-n {
+      font-family: var(--ff-display);
+      font-size: 2.5rem;
+      font-weight: 200;
+      color: var(--mist);
+      line-height: 1;
+      text-align: right;
+    }
+    .pub-venue-tag {
+      display: inline-block;
+      background: var(--rust-light);
+      color: var(--rust);
+      padding: 0.18rem 0.6rem;
+      border-radius: 100px;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .pub-title {
+      font-family: var(--ff-display);
+      font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.35;
+      margin-bottom: 0.3rem;
+    }
+    .pub-title a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid var(--stone);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .pub-title a:hover { color: var(--rust); border-bottom-color: var(--rust); }
+    .pub-authors { font-size: 0.8rem; color: var(--ink); }
+    .pub-authors span { font-weight: 600; }
+    .pub-year {
+      font-family: var(--ff-display);
+      font-style: italic;
+      font-size: 1.4rem;
+      font-weight: 200;
+      color: var(--mist);
+      white-space: nowrap;
+    }
+    @media (max-width: 640px) {
+      .pub-row { grid-template-columns: 40px 1fr; }
+      .pub-year { display: none; }
+    }
+
+    /* ── FOOTER ── */
+    footer { padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem); border-top: 1px solid var(--stone); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .footer-sign { font-family: var(--ff-display); font-size: 0.95rem; font-weight: 300; font-style: italic; color: var(--mist); }
+    .footer-links { display: flex; gap: 1.75rem; }
+    .footer-links a { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-copy { font-size: 0.72rem; color: var(--mist); }
+
+    /* ── REVEAL ── */
+    [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+    [data-reveal].revealed { opacity: 1; transform: none; }
+    [data-reveal][data-delay="1"] { transition-delay: 0.1s; }
+    [data-reveal][data-delay="2"] { transition-delay: 0.2s; }
+    [data-reveal][data-delay="3"] { transition-delay: 0.3s; }
+
+    @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; } .about-photo { max-width: 280px; } }
+    @media (max-width: 640px) { .edu-row, .exp-row { grid-template-columns: 1fr; gap: 0.5rem; } .pub-row { grid-template-columns: 24px 1fr; } .pub-year { display: none; } .skills-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <div class="nav-links">
+      <a href="index.html">Work</a>
+      <a href="about.html">About</a>
+      <a href="publications.html" class="active">Publications</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank" class="nav-resume">Resume</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div class="page-header-inner">
+      <p class="eyebrow" data-reveal>Publications</p>
+      <h1 class="page-heading" data-reveal data-delay="1">Peer-reviewed <em>research</em></h1>
+      <p class="page-sub" data-reveal data-delay="2">Published across <span>transportation, human factors, and design engineering </span>venues.</p>
+    </div>
+  </header>
+
+  <!-- PUBLICATIONS -->
+  <div class="wrap">
+    <section class="pub-section">
+      <div class="pub-grid" data-reveal>
+        <div class="pub-row">
+          <div class="pub-n">01</div>
+          <div>
+            <span class="pub-venue-tag">HFES 2026 · Accepted</span>
+            <p class="pub-title">Enhancing ADAS Training: Examining the Effects of Training Styles and Modes on Driver Knowledge and Decision-Making</p>
+            <p class="pub-authors"><span>Kim, R. Y.,</span> & Zhang, Y. (2026). <em>Human Factors and Ergonomics Society Annual Meeting.</em></p>
+          </div>
+          <div class="pub-year">2026</div>
+        </div>
+        <div class="pub-row">
+          <div class="pub-n">02</div>
+          <div>
+            <span class="pub-venue-tag">Transportation Research Record</span>
+            <p class="pub-title">
+              <a href="https://doi.org/10.1177/03611981261431732" target="_blank">Training Drivers in Advanced Driver Assistance Systems: How Training Content Shapes Driver Knowledge, Decision-Making, and Performance</a>
+            </p>
+            <p class="pub-authors"><span>Kim, R. Y.,</span> & Zhang, Y. (2026). <em>Transportation Research Record</em></p>
+          </div>
+          <div class="pub-year">2026</div>
+        </div>
+        <div class="pub-row">
+          <div class="pub-n">03</div>
+          <div>
+            <span class="pub-venue-tag">AAA Foundation Technical Report</span>
+            <p class="pub-title">
+              <a href="https://trid.trb.org/View/2551052" target="_blank">Effects of Training Content and Approach on Drivers' Understanding of and Performance with Advanced Driver Assistance Systems</a>
+            </p>
+            <p class="pub-authors">Zhang, Y., <span>Kim, R. Y.,</span> & Brennan, S. (2025). <em>AAA Foundation for Traffic Safety</em></p>
+          </div>
+          <div class="pub-year">2025</div>
+        </div>
+        <div class="pub-row">
+          <div class="pub-n">04</div>
+          <div>
+            <span class="pub-venue-tag">ASME IDETC/CIE 2024</span>
+            <p class="pub-title">
+              <a href="https://doi.org/10.1115/DETC2024-146368" target="_blank">Exploring the Use of Immersive VR for Human-Robot Collaboration in Construction: An Interview Study</a>
+            </p>
+            <p class="pub-authors"><span>Kim, R. Y.,</span> Cai, J., Chandran, S., Liu, J., Peng, A., & Miller, S. R. (2024). <em>Proceedings of the ASME 2024 International Design Engineering Technical Conferences and Computers and Information in Engineering Conference.</em> Vol. 88346, p. V02AT02A052.</p>
+          </div>
+          <div class="pub-year">2024</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-sign">Let's make connection.</p>
+    <div class="footer-links">
+      <a href="mailto:yjk5202@psu.edu">Email</a>
+      <a href="https://linkedin.com/in/yeeun--kim" target="_blank">LinkedIn</a>
+      <a href="index.html">Work</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank">Resume</a>
+    </div>
+    <p class="footer-copy">© 2026 Yeeun Kim</p>
+  </footer>
+
+  <script>
+    // Cursor
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; dot.style.left=mx+'px'; dot.style.top=my+'px'; });
+    (function anim(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(anim); })();
+    document.querySelectorAll('a, button, .pub-row').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+
+    // Progress bar
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => { bar.style.width = (window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%'; }, {passive:true});
+
+    // Reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('revealed'); obs.unobserve(e.target); } });
+    }, {threshold:0.08, rootMargin:'0px 0px -60px 0px'});
+    document.querySelectorAll('[data-reveal]').forEach(el => {
+      obs.observe(el);
+      if(el.getBoundingClientRect().top < window.innerHeight) el.classList.add('revealed');
+    });
+  </script>
+</body>
+</html>

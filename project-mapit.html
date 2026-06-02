@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map It! — Yeeun Kim</title>
+  <link rel="icon" type="image/png" href="yk-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink:          #0A1A17;
+      --paper:        #FFFFFF;
+      --white:        #F2FAF7;
+      --stone:        #D4EDE4;
+      --mist:         #94A3B8;
+      --accent:       #2A6B5A;
+      --accent-mid:   #3D9B82;
+      --accent-light: #C5E8DC;
+      --accent-pale:  #EAF7F2;
+      --accent-glow:  #88D4B8;
+      --ff-display: 'Fraunces', Georgia, serif;
+      --ff-body:    'Instrument Sans', sans-serif;
+      --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--ff-body); background: var(--paper); color: var(--ink); line-height: 1.6; font-weight: 300; cursor: none; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    #progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: var(--accent); z-index: 9999; transition: width 0.1s linear; }
+    .cursor-dot, .cursor-ring { position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); }
+    .cursor-dot { width: 6px; height: 6px; background: var(--accent); top: 0; left: 0; }
+    .cursor-ring { width: 32px; height: 32px; border: 1.5px solid var(--accent); top: 0; left: 0; transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), background 0.3s; }
+    .cursor-ring.hover { width: 50px; height: 50px; background: rgba(42,107,90,0.08); }
+    @media (hover: none) { .cursor-dot, .cursor-ring { display: none; } body { cursor: auto; } }
+
+    nav { position: sticky; top: 0; z-index: 100; padding: 1.1rem 4rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--stone); }
+    .nav-logo { font-family: var(--ff-display); font-size: 1.1rem; font-weight: 600; font-style: italic; letter-spacing: 0.02em; }
+    .nav-logo span { font-style: normal; color: var(--accent); font-weight: 600; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-resume { color: var(--accent) !important; border: 1px solid var(--stone); padding: 0.35rem 1rem; border-radius: 100px; transition: background 0.2s, color 0.2s !important; }
+    .nav-resume:hover { background: var(--accent); color: white !important; }
+
+    .case-hero { background: var(--accent); padding: 1rem 4rem 0; position: relative; overflow: hidden; }
+    .case-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 75% 40%, rgba(136,212,184,0.18) 0%, transparent 65%); pointer-events: none; }
+    .hero-inner { max-width: 860px; margin: 0 auto; position: relative; }
+    .case-tag { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-glow); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent-glow); }
+    .case-title { font-family: var(--ff-display); font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 200; line-height: 1.0; letter-spacing: -0.03em; color: #fff; margin-bottom: 0.6rem; }
+    .case-subtitle { font-size: 1rem; font-weight: 300; color: rgba(255,255,255,0.45); margin-bottom: 0.5rem; }
+    .hero-cover { width: 100%; margin-top: 2rem; border-radius: 8px 8px 0 0; overflow: hidden; }
+    .hero-cover img { width: 100%; height: 410px; display: block; object-fit: cover; object-position: center; }
+
+    .case-meta { background: var(--accent-pale); border-bottom: 1px solid var(--accent-light); padding: 0 4rem; }
+    .case-meta-inner { justify-content: space-between; margin: 0 auto; display: flex; flex-wrap: wrap; max-width: 1400px;}
+    .meta-item { padding: 1.5rem 2.5rem 1.5rem 0; margin-right: 2.5rem; border-right: 1px solid var(--accent-light); }
+    .meta-item:last-child { border-right: none; }
+    .meta-item label { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-mid); margin-bottom: 0.35rem; }
+    .meta-item span { font-size: 0.88rem; font-weight: 500; color: var(--ink); }
+
+    .case-body { max-width: 1300px; margin: 0 auto; padding: 4rem 4rem 8rem; }
+
+    .case-toc { display: none; }
+    @media (min-width: 1440px) {
+      .case-toc { display: block; position: fixed; top: 6rem; left: max(1.5rem, calc(50% - 780px)); width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+      .case-toc.toc-visible { opacity: 1; pointer-events: all; }
+    }
+    .toc-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 1rem; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .toc-list a { font-size: 0.78rem; color: var(--mist); text-decoration: none; display: block; padding: 0.2rem 0 0.2rem 0.75rem; border-left: 2px solid transparent; transition: color 0.2s, border-color 0.2s; line-height: 1.4; }
+    .toc-list a:hover { color: var(--accent); border-left-color: var(--accent); }
+
+    .case-section { margin-bottom: 5rem; scroll-margin-top: 6rem; }
+    .case-section h2 { font-family: var(--ff-display); font-size: 1.6rem; font-weight: 300; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--accent-light); }
+    .case-section h3 { font-family: var(--ff-display); font-size: 1.15rem; font-weight: 400; color: var(--accent); margin: 2rem 0 0.75rem; }
+    .case-section p { font-size: 0.95rem; line-height: 1.9; color: #475569; margin-bottom: 1rem; }
+    .case-section ul, .case-section ol { margin: 0.75rem 0 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.45rem; }
+    .case-section ul li, .case-section ol li { font-size: 0.92rem; line-height: 1.75; color: #475569; }
+
+    figure.case-img { width: 100%; border-radius: 8px; overflow: hidden; margin: 1.75rem 0; border: 1px solid var(--accent-light); }
+    figure.case-img img { width: 100%; display: block; }
+    figure.case-img figcaption { font-size: 0.7rem; color: var(--mist); letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; background: var(--accent-pale); border-top: 1px solid var(--accent-light); }
+
+    .finding-box { background: var(--accent-light); border-left: 3px solid var(--accent); padding: 1.25rem 1.5rem; margin: 1.75rem 0; border-radius: 0 6px 6px 0; }
+    .finding-box strong { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+    .finding-box p { font-size: 0.92rem; line-height: 1.75; color: var(--ink) !important; margin: 0 !important; }
+
+    .phase-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); background: var(--accent-light); display: inline-block; padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1.25rem; }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--accent-light); border: 1px solid var(--accent-light); border-radius: 6px; overflow: hidden; margin: 1.75rem 0; }
+    .stat-cell { background: var(--white); padding: 1.25rem; text-align: center; }
+    .stat-num { font-family: var(--ff-display); font-size: 1.4rem; font-weight: 300; color: var(--accent); line-height: 1; margin-bottom: 0.3rem; }
+    .stat-label { font-size: 0.68rem; color: var(--mist); letter-spacing: 0.05em; }
+
+    .next-project { border-top: 1px solid var(--accent-light); padding: 3rem 4rem; max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .next-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.5rem; }
+    .next-title { font-family: var(--ff-display); font-size: 1.2rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: color 0.2s; }
+    .next-title:hover { color: var(--accent); }
+
+    footer { padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem); border-top: 1px solid var(--stone); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .footer-sign { font-family: var(--ff-display); font-size: 0.95rem; font-weight: 300; font-style: italic; color: var(--mist); }
+    .footer-links { display: flex; gap: 1.75rem; }
+    .footer-links a { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-copy { font-size: 0.72rem; color: var(--mist); }
+
+    @media (max-width: 760px) {
+      nav { padding: 1rem 1.5rem; }
+      .case-hero { padding: 4rem 1.5rem 0; }
+      .case-meta { padding: 0 1.5rem; }
+      .case-body { padding: 2rem 1.5rem 5rem; }
+      .next-project { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; }
+      .stat-grid { grid-template-columns: repeat(2,1fr); }
+      .meta-item { padding: 1rem 1rem 1rem 0; margin-right: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <div class="nav-links">
+      <a href="index.html">Work</a>
+      <a href="about.html">About</a>
+      <a href="publications.html">Publications</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank" class="nav-resume">Resume</a>
+    </div>
+  </nav>
+
+<!-- HERO -->
+  <div class="case-hero">
+    <div class="hero-inner">
+      <p class="case-tag">Makeathon · University of Michigan</p>
+      <h1 class="case-title">Map It!</h1>
+      <p class="case-subtitle">A Physical Interactive Puzzle for Family Location Tracking</p>
+      <div class="hero-cover">
+        <img src="assets/mapit/hero.jpg" alt="Map It! — Makeathon">
+      </div>
+    </div>
+  </div>
+
+  <!-- META -->
+  <div class="case-meta">
+    <div class="case-meta-inner">
+      <div class="meta-item"><label>Role</label><span>UX Designer · UX Researcher</span></div>
+      <div class="meta-item"><label>Team</label><span>Yeeun Kim · Anuya Karnik · Sushmitha Rao · Nikita Badhwar</span></div>
+      <div class="meta-item"><label>Event</label><span>Makeathon</span></div>
+      <div class="meta-item"><label>Institution</label><span>University of Michigan</span></div>
+      <div class="meta-item"><label>Type</label><span>Physical Product + Mobile App</span></div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <aside class="case-toc" id="caseToc">
+    <p class="toc-label">Contents</p>
+    <ul class="toc-list">
+      <li><a href="#about">About</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#app">Create Your Set</a></li>
+      <li><a href="#assemble">Assemble & Display</a></li>
+      <li><a href="#tracking">Tracking & Safety</a></li>
+      <li><a href="#why">Why Map It?</a></li>
+      <li><a href="#audience">Target Audience</a></li>
+      <li><a href="#demo">App Demo Video</a></li>
+    </ul>
+  </aside>
+
+  <div class="case-body">
+
+    <!-- ABOUT -->
+    <div class="case-section" id="about">
+      <h2>What is Map It!?</h2>
+      <p>Map It! is a <strong>physical, interactive puzzle</strong> that allows families to build a map of their everyday locations and track each other's whereabouts. Designed at the University of Michigan Makeathon 2021, Map It! combines the tactile joy of Lego-style building with GPS-based location tracking to create a product that is both educational and safety-focused.</p>
+
+      <figure class="case-img">
+        <img src="assets/mapit/what-is.png" alt="What is Map It — Lego puzzle board">
+        <figcaption>Map It! — Physical interactive puzzle with Lego-style neighborhood map</figcaption>
+      </figure>
+
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="stat-num">🧩</div><div class="stat-label">Physical Puzzle</div></div>
+        <div class="stat-cell"><div class="stat-num">📱</div><div class="stat-label">Companion App</div></div>
+        <div class="stat-cell"><div class="stat-num">📍</div><div class="stat-label">GPS Tracking</div></div>
+        <div class="stat-cell"><div class="stat-num">👨‍👩‍👧</div><div class="stat-label">Family-Focused</div></div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="case-section" id="how">
+      <h2>How Does Map It Work?</h2>
+      <p class="phase-label">01 · Overview</p>
+
+      <ol>
+        <li><strong>Customize</strong> — Download the app and start customizing your neighborhood.</li>
+        <li><strong>Build</strong> — Build your map using the Lego blocks in the Map It! set.</li>
+        <li><strong>Track</strong> — Connect the completed setup with a GPS device and watch your family move around the city.</li>
+      </ol>
+
+      <figure class="case-img">
+        <img src="assets/mapit/how-it-works.png" alt="How Map It works — 3 steps: Customize, Build, Track">
+        <figcaption>Three Steps — Customize · Build · Track</figcaption>
+      </figure>
+    </div>
+
+    <!-- CREATE YOUR SET -->
+    <div class="case-section" id="app">
+      <h2>Create Your Set</h2>
+      <p class="phase-label">02 · App Flow</p>
+      <p>The companion app guides users through setting up their Map It! puzzle in three easy steps:</p>
+
+      <ol>
+        <li>Download the app and start adding your frequently visited locations to begin building your map.</li>
+        <li>Once you've added all of your locations, check out your Lego view. Each item you select will be added to your cart.</li>
+        <li>When you're happy with how your Lego view looks, review your cart and checkout.</li>
+      </ol>
+
+      <p>We'll send you all the necessary pieces to begin building your map.</p>
+
+      <figure class="case-img">
+        <img src="assets/mapit/app-steps.png" alt="Create Your Set — App flow">
+        <figcaption>Create Your Set — App walkthrough with three easy steps</figcaption>
+      </figure>
+    </div>
+
+    <!-- ASSEMBLE AND DISPLAY -->
+    <div class="case-section" id="assemble">
+      <h2>Assemble and Display</h2>
+      <p class="phase-label">03 · Physical Build</p>
+
+      <ol>
+        <li>A reference of how to construct the neighborhood is provided with the Map It! Kit.</li>
+        <li>Parents and children can <strong>construct the map together</strong>.</li>
+        <li>Access the <strong>GPS and emergency contact information</strong> features by attaching the control panel.</li>
+        <li><strong>Customize your map</strong> at any time by ordering and adding a variety of destinations including: houses, restaurants, schools, libraries, and more!</li>
+      </ol>
+
+      <figure class="case-img">
+        <img src="assets/mapit/assemble.png" alt="Assemble and Display — family building together">
+        <figcaption>Assemble and Display — Parents and children building the puzzle together</figcaption>
+      </figure>
+
+      <div class="finding-box">
+        <strong>Design Rationale</strong>
+        <p>By making the assembly a shared activity, Map It! becomes more than a tracking device — it's a family bonding experience that teaches children spatial awareness while giving parents peace of mind.</p>
+      </div>
+
+      <figure class="case-img">
+        <video controls playsinline preload="metadata" style="width:100%; display:block;">
+          <source src="assets/mapit/lego-display.mp4" type="video/mp4">
+        </video>
+        <figcaption>Map It! Puzzle Prototype — Physical Build Demo</figcaption>
+      </figure>
+    </div>
+
+    <!-- TRACKING AND STAY SAFE -->
+    <div class="case-section" id="tracking">
+      <h2>Tracking and Stay Safe</h2>
+      <p class="phase-label">04 · Safety</p>
+
+      <ol>
+        <li><strong>Set up tracking</strong> for each family member using devices such as trackers, smartphones, or any other GPS-enabled devices.</li>
+        <li>Every family member then has an <strong>LED color</strong> dedicated to show their location on the physical map.</li>
+        <li>If your child goes <strong>out of radius</strong>, the app sends you a notification, which is useful for detecting unusual activity.</li>
+      </ol>
+
+      <figure class="case-img">
+        <img src="assets/mapit/tracking.png" alt="Tracking and Stay Safe — Map It displayed in living room">
+        <figcaption>Tracking and Stay Safe — Map It! puzzle displayed on wall with live GPS tracking</figcaption>
+      </figure>
+    </div>
+
+    <!-- WHY IS MAP IT HELPFUL -->
+    <div class="case-section" id="why">
+      <h2>Why is Map It! Helpful?</h2>
+      <p class="phase-label">05 · Impact</p>
+
+      <ul>
+        <li><strong>Family bonding</strong> — Map It! is a fun way for families to work together to build a puzzle. Children can map out their communities and get a better understanding of their neighborhood.</li>
+        <li><strong>Spatial awareness</strong> — Kids start developing spatial awareness at the age of 18 months. This skill is developed by learning locations, measuring distances, puzzle solving, and Lego activities.</li>
+        <li><strong>Child safety</strong> — Tracking children in common locations can ensure their safety. The FBI states that over 400,000 children are reported missing every year.</li>
+      </ul>
+
+    </div>
+
+    <!-- TARGET AUDIENCE -->
+    <div class="case-section" id="audience">
+      <h2>Target Audience</h2>
+      <p class="phase-label">06 · Users</p>
+
+      <h3>Children (Ages 2–10)</h3>
+      <p>The primary audience — they are developing skills of reading, comprehending objects and shapes, and understanding their surroundings. Map It! supports cognitive development through hands-on building and spatial exploration.</p>
+
+      <h3>Parents</h3>
+      <p>The secondary audience — along with acting as a teaching tool, the device connects to their phone, allowing parents to ensure their kids get home safe from school and other events.</p>
+
+    </div>
+
+    <!-- APP DEMO -->
+    <div class="case-section" id="demo">
+      <h2>App Demo Video</h2>
+      <p class="phase-label">07 · App Demo Video</p>
+      <figure class="case-img" style="max-width:500px; margin:1.75rem auto;">
+        <video controls playsinline preload="metadata" style="width:100%; display:block;">
+          <source src="assets/mapit/app-flow.mp4" type="video/mp4">
+        </video>
+        <figcaption>Map It! — Companion App Flow Demo</figcaption>
+      </figure>
+    </div>
+
+  </div>
+
+  <div class="next-project">
+    <div>
+      <p class="next-label">Next Project</p>
+      <a href="project-cabby.html" class="next-title">Cabby — Self-Driving Taxi UX/UI Interface Design →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p class="footer-sign">Let's make connection.</p>
+    <div class="footer-links">
+      <a href="mailto:yjk5202@psu.edu">Email</a>
+      <a href="https://linkedin.com/in/yeeun--kim" target="_blank">LinkedIn</a>
+      <a href="index.html">Work</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank">Resume</a>
+    </div>
+    <p class="footer-copy">© 2026 Yeeun Kim</p>
+  </footer>
+
+  <script>project-cabby.html
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; dot.style.left=mx+'px'; dot.style.top=my+'px'; });
+    (function anim(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(anim); })();
+    document.querySelectorAll('a, button, figure').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => { bar.style.width = (window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%'; }, {passive:true});
+    const toc = document.getElementById('caseToc');
+    const hero = document.querySelector('.case-hero');
+    if (toc && hero) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { toc.classList.toggle('toc-visible', !entry.isIntersecting); });
+      }, { threshold: 0 });
+      observer.observe(hero);
+    }
+  </script>
+</body>
+</html>

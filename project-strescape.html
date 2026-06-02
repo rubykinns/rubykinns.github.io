@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strescape — Yeeun Kim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1E1135;
+      --blue: #1E54B7;
+      --stone: #E8EFFC;
+      --mist: #94A3B8;
+      --paper: #FFFFFF;
+      --white: #F8FAFF;
+      --purple: #5B3FA6;
+      --purple-mid: #7B5EA7;
+      --purple-light: #EDE7FF;
+      --purple-pale: #F5F2FF;
+      --lavender: #C4B5E8;
+      --ff-display: 'Fraunces', Georgia, serif;
+      --ff-body:    'Instrument Sans', sans-serif;
+    }
+    
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; font-weight: 300; }
+    a { color: inherit; text-decoration: none; }
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; padding: 1.1rem 4rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--stone); }
+    .nav-logo { font-family: 'Fraunces', Georgia, serif; font-size: 1.1rem; font-weight: 300; font-style: italic; letter-spacing: 0.02em; text-decoration: none; color: var(--ink); }
+    .nav-logo span { font-style: normal; color: var(--purple); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; text-decoration: none; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-resume { color: var(--purple) !important; border: 1px solid var(--stone); padding: 0.35rem 1rem; border-radius: 100px; transition: background 0.2s, color 0.2s !important; }
+    .nav-resume:hover { background: var(--purple); color: white !important; }
+
+    /* HERO */
+    .case-hero { background: var(--purple); padding: 3rem 4rem 0; position: relative; overflow: hidden; }
+    .case-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 75% 40%, rgba(196,181,232,0.2) 0%, transparent 65%); pointer-events: none; }
+    .hero-inner { max-width: 860px; margin: 0 auto; position: relative; }
+    .case-tag { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--lavender); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--lavender); }
+    .case-title { font-family: 'Fraunces', serif; font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 200; line-height: 1.0; letter-spacing: -0.03em; color: #fff; margin-bottom: 0.6rem; }
+    .case-subtitle { font-size: 1rem; font-weight: 300; color: rgba(255,255,255,0.45); margin-bottom: 0.5rem; }
+    .hero-cover { width: 100%; margin-top: 2rem; border-radius: 8px 8px 0 0; overflow: hidden; }
+    .hero-cover img { width: 100%; height: 410px; display: block; }
+
+    /* META */
+    .case-meta { background: var(--purple-pale); border-bottom: 1px solid var(--purple-light); padding: 0 4rem; }
+    .case-meta-inner { justify-content:space-between; max-width: 1600px; margin: 0 auto; display: flex; flex-wrap: wrap; }
+    .meta-item { padding: 1.5rem 2.5rem 1.5rem 0; margin-right: 2.5rem; border-right: 1px solid var(--purple-light); }
+    .meta-item:last-child { border-right: none; }
+    .meta-item label { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--purple-mid); margin-bottom: 0.35rem; }
+    .meta-item span { font-size: 0.88rem; font-weight: 500; color: var(--ink); }
+
+    /* JUMP LINK */
+    .jump-link { display: block; text-align: center; padding: 1rem; background: var(--purple-light); color: var(--purple); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
+    .jump-link:hover { background: var(--lavender); }
+
+    /* BODY */
+    .case-body { max-width: 1300px; margin: 0 auto; padding: 4rem 4rem 8rem; }
+
+    /* TOC */
+    .case-toc { display: none; }
+    @media (min-width: 1280px) {
+      .case-toc { display: block; position: fixed; top: 6rem; left: max(1.5rem, calc(50% - 780px)); width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+      .case-toc.toc-visible { opacity: 1; pointer-events: all; }
+    }
+    .toc-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 1rem; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .toc-list a { font-size: 0.78rem; color: var(--mist); text-decoration: none; display: block; padding: 0.2rem 0 0.2rem 0.75rem; border-left: 2px solid transparent; transition: color 0.2s, border-color 0.2s; line-height: 1.4; }
+    .toc-list a:hover { color: var(--purple); border-left-color: var(--purple); }
+
+    /* SECTIONS */
+    .case-section { margin-bottom: 5rem; scroll-margin-top: 6rem; }
+    .case-section h2 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 300; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--purple-light); }
+    .case-section h3 { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 400; color: var(--purple); margin: 2rem 0 0.75rem; }
+    .case-section p { font-size: 0.95rem; line-height: 1.9; color: #475569; margin-bottom: 1rem; }
+    .case-section ul { margin: 0.75rem 0 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.45rem; }
+    .case-section ul li { font-size: 0.92rem; line-height: 1.75; color: #475569; }
+
+    /* IMAGES */
+    figure.case-img { width: 100%; border-radius: 8px; overflow: hidden; margin: 1.75rem 0; border: 1px solid var(--purple-light); }
+    figure.case-img img { width: 100%; display: block; }
+    figure.case-img figcaption { font-size: 0.7rem; color: var(--mist); letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; background: var(--purple-pale); border-top: 1px solid var(--purple-light); }
+
+    /* PLACEHOLDER (이미지 없을 때) */
+    .img-placeholder { width: 100%; aspect-ratio: 16/9; background: var(--purple-pale); border: 2px dashed var(--purple-light); border-radius: 8px; margin: 1.75rem 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; color: var(--purple-mid); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; }
+    .img-placeholder svg { width: 28px; height: 28px; opacity: 0.4; stroke: var(--purple-mid); fill: none; stroke-width: 1.5; }
+
+    .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.75rem 0; }
+    .img-grid-2 figure { border-radius: 8px; overflow: hidden; border: 1px solid var(--purple-light); }
+    .img-grid-2 img { width: 100%; display: block; }
+    .img-grid-2 figcaption { font-size: 0.68rem; color: var(--mist); letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 0.75rem; background: var(--purple-pale); border-top: 1px solid var(--purple-light); }
+
+    .img-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1.75rem 0; }
+    .img-grid-3 figure { border-radius: 8px; overflow: hidden; border: 1px solid var(--purple-light); }
+    .img-grid-3 img { width: 100%; display: block; }
+    .img-grid-3 figcaption { font-size: 0.65rem; color: var(--mist); letter-spacing: 0.08em; text-transform: uppercase; padding: 0.4rem 0.6rem; background: var(--purple-pale); border-top: 1px solid var(--purple-light); }
+
+    /* FINDING BOX */
+    .finding-box { background: var(--purple-light); border-left: 3px solid var(--purple); padding: 1.25rem 1.5rem; margin: 1.75rem 0; border-radius: 0 6px 6px 0; }
+    .finding-box strong { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--purple); margin-bottom: 0.5rem; }
+    .finding-box p { font-size: 0.92rem; line-height: 1.75; color: var(--ink) !important; margin: 0 !important; }
+
+    /* PHASE LABEL */
+    .phase-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #5B8DEF; background: #DBEAFE; display: inline-block; padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1.25rem; }
+
+    /* STAT GRID */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--purple-light); border: 1px solid var(--purple-light); border-radius: 6px; overflow: hidden; margin: 1.75rem 0; }
+    .stat-cell { background: var(--white); padding: 1.25rem; text-align: center; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 200; color: var(--purple); line-height: 1; margin-bottom: 0.3rem; }
+    .stat-label { font-size: 0.68rem; color: var(--mist); letter-spacing: 0.05em; }
+
+    /* PROTOTYPE THUMBNAIL */
+    .prototype-thumb {
+      position: relative; border-radius: 8px; overflow: hidden;
+      margin: 1.75rem 0; display: block; text-decoration: none;
+      border: 1px solid var(--purple-light);
+    }
+    .prototype-thumb img { width: 100%; display: block; transition: transform 0.4s ease; }
+    .prototype-thumb:hover img { transform: scale(1.02); }
+    .prototype-thumb-overlay {
+      position: absolute; inset: 0;
+      background: rgba(74, 50, 133, 0.55);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1rem;
+      transition: background 0.3s;
+    }
+    .prototype-thumb:hover .prototype-thumb-overlay { background: rgba(74, 50, 133, 0.7); }
+    .prototype-thumb-play {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--lavender); display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: var(--purple);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+    .prototype-thumb:hover .prototype-thumb-play { transform: scale(1.1); }
+    .prototype-thumb-label {
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: white;
+    }
+
+    /* YOUTUBE FACADE */
+    .yt-facade {
+      position: relative; width: 100%; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; margin: 1.75rem 0;
+      border: 1px solid var(--purple-light); cursor: pointer;
+      background: #000;
+    }
+    .yt-facade img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+    .yt-facade:hover img { transform: scale(1.02); }
+    .yt-facade-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.35);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s;
+    }
+    .yt-facade:hover .yt-facade-overlay { background: rgba(0,0,0,0.5); }
+    .yt-play-btn {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: #FF0000; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .yt-facade:hover .yt-play-btn { transform: scale(1.12); background: #cc0000; }
+    .yt-play-btn svg { width: 28px; height: 28px; fill: white; margin-left: 4px; }
+    .yt-facade iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      border: none; display: none;
+    }
+    .yt-facade.playing img,
+    .yt-facade.playing .yt-facade-overlay { display: none; }
+    .yt-facade.playing iframe { display: block; }
+
+    /* PROTOTYPE LINK BOX */
+    .prototype-box { background: var(--purple); border-radius: 8px; padding: 2.5rem; text-align: center; margin: 1.75rem 0; }
+    .prototype-box p { color: rgba(255,255,255,0.6); font-size: 0.88rem; margin-bottom: 1.25rem !important; color: rgba(255,255,255,0.6) !important; }
+    .prototype-btn { display: inline-block; background: var(--lavender); color: var(--purple); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.9rem 2rem; border-radius: 4px; text-decoration: none; transition: background 0.2s; }
+    .prototype-btn:hover { background: #fff; }
+
+    /* VIDEO */
+    .video-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; margin: 1.75rem 0; border: 1px solid var(--purple-light); background: #000; }
+    .video-wrap iframe, .video-wrap video { width: 100%; height: 100%; display: block; border: none; }
+
+    /* NEXT PROJECT */
+    .next-project { border-top: 1px solid var(--purple-light); padding: 3rem 4rem; max-width: 860px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .next-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.5rem; }
+    .next-title { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: color 0.2s; }
+    .next-title:hover { color: var(--purple); }
+
+    /* RESPONSIVE */
+    @media (max-width: 760px) {
+      nav { padding: 1rem 1.5rem; }
+      .case-hero { padding: 4rem 1.5rem 0; }
+      .case-meta { padding: 0 1.5rem; }
+      .case-body { padding: 2rem 1.5rem 5rem; }
+      .next-project { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; }
+      .stat-grid { grid-template-columns: repeat(2,1fr); }
+      .img-grid-2, .img-grid-3 { grid-template-columns: 1fr; }
+      .meta-item { padding: 1rem 1rem 1rem 0; margin-right: 1rem; }
+    }
+
+     /* ── FOOTER ── */
+    footer { padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem); border-top: 1px solid var(--stone); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .footer-sign { font-family: var(--ff-display); font-size: 0.95rem; font-weight: 300; font-style: italic; color: var(--mist); }
+    .footer-links { display: flex; gap: 1.75rem; }
+    .footer-links a { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-copy { font-size: 0.72rem; color: var(--mist); }
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
+    <div class="nav-links">
+      <a href="index.html">Work</a>
+      <a href="about.html">About</a>
+      <a href="publications.html">Publications</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank" class="nav-resume">Resume</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="case-hero">
+    <div class="hero-inner">
+      <p class="case-tag">UX Design & Research · ACM-CHI 2021 Student Game Competition</p>
+      <h1 class="case-title">Strescape</h1>
+      <p class="case-subtitle">Gamifying Stress Management through an Escape Room Game App</p>
+      <div class="hero-cover">
+        <img src="assets/strescape/card-image.jpg" alt="Strescape — CHI 2021">
+      </div>
+    </div>
+  </div>
+
+  <a href="#final-prototype" class="jump-link">↓ Jump to Interactive Prototype</a>
+
+  <!-- META -->
+  <div class="case-meta">
+    <div class="case-meta-inner">
+      <div class="meta-item"><label>Role</label><span>UX Designer & Researcher</span></div>
+      <div class="meta-item"><label>Team</label><span> Ruby Kim · Nikita Badhwar · Anuya Karnik · Sushmitha Rao</span></div>
+      <div class="meta-item"><label>Year</label><span>2021</span></div>
+      <div class="meta-item"><label>Tools</label><span>Adobe Illustrator · Adobe Premiere Pro · Adobe XD</span></div>
+      <div class="meta-item"><label>Venue</label><span>ACM-CHI 2021 Student Game Competition</span></div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <aside class="case-toc" id="caseToc">
+    <p class="toc-label">Contents</p>
+    <ul class="toc-list">
+      <li><a href="#about">About</a></li>
+      <li><a href="#goal">Goal</a></li>
+      <li><a href="#ideation">Ideation</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#personas">Personas</a></li>
+      <li><a href="#wireframes">Wireframes</a></li>
+      <li><a href="#design-system">UI Elements</a></li>
+      <li><a href="#final-prototype">Prototype</a></li>
+      <li><a href="#video">Gameplay Video</a></li>
+      <li><a href="#reflection">Reflection</a></li>
+    </ul>
+  </aside>
+
+  <div class="case-body">
+
+    <!-- ABOUT -->
+    <div class="case-section" id="about">
+      <h2>About the Project</h2>
+      <p>I worked on designing this game for the ACM-CHI 2021 Student Game Competition with three teammates from the School of Information at the University of Michigan. We received guidance from Dr. Carol Scott (Post-Doctoral Research Fellow, Social Work) for conducting background research on stress, mental health, and mindfulness for high school students.
+      </p>
+      <p>Strescape is an interactive escape room-style game for high school students that helps them identify and manage stress.Strescape is an interactive escape room-style game for high school students that helps them identify and manage stress. Players solve a series of puzzles and clues while engaging in guided mindfulness conversations with an in-game agent between each puzzle.
+      </p>
+
+      <figure class="case-img">
+        <img src="assets/strescape/game-overview.png" alt="Strescape game overview — 3 steps">
+        <figcaption>Game overview — questionnaire · escape room puzzles · mindfulness chat with guide</figcaption>
+      </figure>
+
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="stat-num">4</div><div class="stat-label">Team Members</div></div>
+        <div class="stat-cell"><div class="stat-num">4mo</div><div class="stat-label">Duration</div></div>
+        <div class="stat-cell"><div class="stat-num">CHI</div><div class="stat-label">ACM 2021</div></div>
+        <div class="stat-cell"><div class="stat-num">14–18</div><div class="stat-label">Target Age</div></div>
+      </div>
+    </div>
+
+    <!-- GOAL -->
+    <div class="case-section" id="goal">
+      <h2>The Goal</h2>
+      <p>Our goal was to create a <strong>transformative and transgressive play</strong> — expanding traditional gameplay by using a gaming interface to motivate high school students to recognize and process their stress and the factors contributing to it.</p>
+      <p>Strescape allows users to work through various puzzles in an escape room while being prompted to complete mindfulness tasks between each puzzle — teaching healthy, long-term coping mechanisms through a familiar, fun interface.</p>
+
+      <div class="finding-box">
+        <strong>Core Design Principle</strong>
+        <p>The game should feel like a relief, not a burden. All mindfulness steps are optional, puzzles are not overly complex, and the guide character is non-judgmental and compassionate — ensuring the app itself never becomes a source of stress.</p>
+      </div>
+    </div>
+
+    <!-- IDEATION -->
+    <div class="case-section" id="ideation">
+      <h2>Brainstorming & Ideation</h2>
+      <p class="phase-label">01 · Ideation</p>
+      <p>We started by brainstorming as many problems as we could solve using a game based on transgressive and transformative play. The main idea emerged organically from team conversation — as we talked about our own high school experiences, we realized all of us had gone through meaningful stress, and that a reflective game might help others do the same.</p>
+
+      <figure class="case-img">
+        <img src="assets/strescape/ideation-table.png" alt="Brainstorming table — team ideation">
+        <figcaption>Brainstorming — team ideation table organizing initial game concepts by member, target audience, and expansion ideas</figcaption>
+      </figure>
+
+    </div>
+
+    <!-- RESEARCH -->
+    <div class="case-section" id="research">
+      <h2>Background Research</h2>
+      <p class="phase-label">02 · Research</p>
+      <p>Under the guidance of Dr. Carol Scott, we researched stress, anxiety, mindfulness, and meditation to define our problem and solution.</p>
+
+      <h3>Problem Statement</h3>
+      <p>Students in high school struggle with stress and anxiety regarding peer pressure, academics, parental expectations — and most of the time these issues go unnoticed due to social stigma.</p>
+
+      <h3>Solution</h3>
+      <p>A game targeted at helping students recognize, process, and reduce stress — motivating them to be aware of their issues and seek help through embedded suggestions and mindfulness exercises.</p>
+
+      <h3>Target Audience & Platform</h3>
+      <p>High school students aged 14–18. Designed for <strong>smartphones</strong> — making support available wherever and whenever a student needs it. The game runs in landscape mode.</p>
+
+    </div>
+
+    <!-- PERSONAS -->
+    <div class="case-section" id="personas">
+      <h2>User Persona & Scenario</h2>
+      <p class="phase-label">03 · Persona</p>
+      <p>Based on background research and competitive analysis, we created 4 primary user personas. Among them, <strong>Distressed Dhruv</strong> served as the central persona driving the core game design — representing a high-achieving student whose stress is self-imposed and largely invisible to those around him.</p>
+
+      <figure class="case-img">
+        <img src="assets/strescape/personas-all.jpg" alt="4 personas overview — Studious Sarah, Distressed Dhruv, Ambitious Annie, Anxious Alex">
+        <figcaption>4 Primary Personas — Studious Sarah · Distressed Dhruv · Ambitious Annie · Anxious Alex</figcaption>
+      </figure>
+
+      <h3>Focus Persona: Distressed Dhruv</h3>
+      <figure class="case-img">
+        <img src="assets/strescape/persona-dhruv.jpg" alt="Distressed Dhruv — detailed persona card">
+        <figcaption>Distressed Dhruv · Grade 11 · Chicago, Illinois — personality, stress contributors, mental health goals, and tools currently using</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/strescape/user-scenario.jpg" alt="Detailed user scenario — Distressed Dhruv playing Strescape after a stressful AP Calculus exam">
+        <figcaption>User scenario — Distressed Dhruv playing Strescape after a stressful AP Calculus quiz</figcaption>
+      </figure>
+
+      <div class="finding-box">
+        <strong>Key Insight from Personas</strong>
+        <p>Puzzles in the game should never be overly complex — a frustrating game would be counterintuitive to the goal of stress relief. This directly informed the adaptive difficulty design and the always-available hint system.</p>
+      </div>
+    </div>
+
+    <!-- WIREFRAMES -->
+    <div class="case-section" id="wireframes">
+      <h2>Sketching & Wireframing</h2>
+      <p class="phase-label">04 · Wireframes</p>
+      <p>Once we outlined how the game would function, we created lo-fi wireframes for all screens — defining visual layout, interaction flows, and the placement of mindfulness prompts between puzzles.</p>
+
+      <figure class="case-img">
+        <img src="assets/strescape/wireframe-sheet-1.jpg" alt="Lo-fi wireframes — screens 1 to 5">
+        <figcaption>Simple Wireframes — Start Screen · Login · Questionnaire · Theme Selection · Loading</figcaption>
+      </figure>
+
+      <figure class="case-img">
+        <img src="assets/strescape/wireframe-sheet-2.jpg" alt="Lo-fi wireframes — screens 6 to 10">
+        <figcaption>Simple Wireframes — Escape Room · Puzzle Screen · Theme Map · Between-Puzzle Questions · Final Screen</figcaption>
+      </figure>
+      <figure class="case-img">
+        <img src="assets/strescape/game-flowmap.png" alt="Game flow map — full puzzle sequence">
+        <figcaption>Game flowmap — 7 stages from room entry through 5 puzzles to post-game assessment</figcaption>
+      </figure>
+
+    </div>
+
+    <!-- DESIGN SYSTEM -->
+    <div class="case-section" id="design-system">
+      <h2>Visual Design Elements</h2>
+      <p class="phase-label">05 · Design System</p>
+      <p>Before prototyping, we defined the design components to ensure consistency in the visual identity and aesthetic of the game. Our visual system aimed at:</p>
+      <ul>
+        <li>Maintaining a <strong>calming aesthetic</strong> using a primary scheme of desaturated purple and yellow</li>
+        <li>Providing <strong>playfulness</strong> through a secondary color palette</li>
+        <li>Designing an <strong>empathetic guide character</strong> to walk users through mindfulness exercises</li>
+      </ul>
+
+      <figure class="case-img">
+        <img src="assets/strescape/design-system.png" alt="Strescape design system — color palette, UI elements, typography, game elements, guide avatar">
+        <figcaption>Design system — color palette · UI elements · typography · game components with animation variants · Strescape guide avatar</figcaption>
+      </figure>
+
+      <div class="finding-box">
+        <strong>Trauma-Informed Design</strong>
+        <p>The guide character design was intentionally trauma-informed — giving users full control over the guide's appearance so the app feels safe and personalized, not clinical or prescriptive.</p>
+      </div>
+    </div>
+
+    <!-- PROTOTYPE -->
+    <div class="case-section" id="final-prototype">
+      <h2>Try the Final Prototype</h2>
+      <p class="phase-label">06 · Hi-fi Prototype</p>
+      <p>Using the defined design system, we built the final Strescape prototype in Adobe XD — covering the complete game flow from stress assessment through mindfulness chat to post-game journaling.</p>
+
+      <a href="https://xd.adobe.com/view/7746d513-0976-46c9-bdc3-43f2fd6f5460-2215/" target="_blank" rel="noopener" class="prototype-thumb">
+        <img src="assets/strescape/card-image.jpg" alt="Strescape Adobe XD Prototype">
+        <div class="prototype-thumb-overlay">
+          <div class="prototype-thumb-play">▶</div>
+          <span class="prototype-thumb-label">Click to Try the Interactive Prototype</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- VIDEO -->
+    <div class="case-section" id="video">
+      <h2>Gameplay Video & User Testing</h2>
+      <p class="phase-label">07 · Gameplay Demo</p>
+      <p>Along with the prototype, we submitted a gameplay video showing two users testing the game — and our own demonstration walkthrough.</p>
+
+      <div class="yt-facade" id="ytFacade">
+        <img src="https://img.youtube.com/vi/cyIc-p-tYS4/maxresdefault.jpg" alt="Strescape Gameplay Demo">
+        <div class="yt-facade-overlay">
+          <div class="yt-play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <iframe id="ytIframe" data-src="https://www.youtube.com/embed/cyIc-p-tYS4?autoplay=1" title="Strescape Gameplay Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <script>
+        document.getElementById('ytFacade').addEventListener('click', function() {
+          var iframe = document.getElementById('ytIframe');
+          iframe.src = iframe.dataset.src;
+          this.classList.add('playing');
+        });
+      </script>
+    </div>
+
+    <!-- REFLECTION -->
+    <div class="case-section" id="reflection">
+      <h2>Reflection</h2>
+      <p>Although we did not advance to the next stage of the competition, Strescape was a formative project that combined UX research, game design, and mental health in a domain I care deeply about.</p>
+      <ul>
+        <li><strong>Trauma-informed design is universal design.</strong> Designing with care — offering choices, removing pressure, building in flexibility — made the app better for all users, not just those in crisis.</li>
+        <li><strong>Games are powerful research tools.</strong> Using escape room structure to study stress recognition showed me how gameplay can scaffold emotional reflection in ways a questionnaire cannot.</li>
+        <li><strong>CHI raised the rigor bar.</strong> Writing the extended abstract for ACM-CHI required translating design decisions into research language — a skill directly shaping my PhD work today.</li>
+        <li><strong>Team dynamics matter in design.</strong> The best idea came from a team conversation, not a solo brainstorm. The diversity of our team's experiences made the personas richer and the design more inclusive.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="next-project">
+    <div>
+      <p class="next-label">Next Project</p>
+      <a href="project-saemi.html" class="next-title">SAEMI — Digital Therapeutics AI Companion →</a>
+    </div>
+  </div>
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-sign">Let's make connection.</p>
+    <div class="footer-links">
+      <a href="mailto:yjk5202@psu.edu">Email</a>
+      <a href="https://linkedin.com/in/yeeun--kim" target="_blank">LinkedIn</a>
+      <a href="index.html">Work</a>
+      <a href="https://drive.google.com/file/d/1FgUYZ2PwSiiR_6xkRh5Hqs0EAnsA-3Vf/view?usp=drive_link" target="_blank">Resume</a>
+    </div>
+    <p class="footer-copy">© 2026 Yeeun Kim</p>
+  </footer>
+
+  <script>
+    const toc = document.getElementById('caseToc');
+    const hero = document.querySelector('.case-hero');
+    if (toc && hero) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          toc.classList.toggle('toc-visible', !entry.isIntersecting);
+        });
+      }, { threshold: 0 });
+      observer.observe(hero);
+    }
+  </script>
+</body>
+</html>
