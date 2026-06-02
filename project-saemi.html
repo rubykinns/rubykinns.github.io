@@ -26,11 +26,22 @@
     }
     
     html { scroll-behavior: smooth; }
-    body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; font-weight: 300; }
+    body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; font-weight: 300; cursor: none;}
     a { color: inherit; text-decoration: none; }
+
+        /* ─────────────────────────────────────────────
+       CUSTOM CURSOR
+    ───────────────────────────────────────────── */
+    #progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: var(--teal-mid); z-index: 9999; transition: width 0.1s linear; }
+    .cursor-dot, .cursor-ring { position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition-property: opacity; transition-duration: 0.3s; }
+    .cursor-dot { width: 6px; height: 6px; background: var(--teal-mid); top: 0; left: 0; }
+    .cursor-ring { width: 32px; height: 32px; border: 1.5px solid var(--teal-mid); top: 0; left: 0; transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), border-color 0.3, background 0.3s; }
+    .cursor-ring.hover { width: 50px; height: 50px; background: rgba(42,107,90,0.08); border-color: var(--teal-mid)}
+    @media (hover: none) { .cursor-dot, .cursor-ring { display: none; } body { cursor: auto; } }
+
     /* NAV */
     nav { position: sticky; top: 0; z-index: 100; padding: 1.1rem 4rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--stone); }
-    .nav-logo { font-family: 'Fraunces', Georgia, serif; font-size: 1.1rem; font-weight: 300; font-style: italic; letter-spacing: 0.02em; text-decoration: none; color: var(--ink); }
+    .nav-logo { font-family: 'Fraunces', Georgia, serif; font-size: 1.1rem; font-style: italic; letter-spacing: 0.02em; text-decoration: none; color: var(--ink); }
     .nav-logo span { font-style: normal; color: var(--teal); }
     .nav-links { display: flex; gap: 2rem; align-items: center; }
     .nav-links a { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); transition: color 0.2s; text-decoration: none; }
@@ -164,6 +175,9 @@
   </style>
 </head>
 <body>
+  <div id="progress-bar"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
 
   <nav>
     <a href="index.html" class="nav-logo"><em>Yeeun</em> <span>Kim</span></a>
@@ -457,13 +471,22 @@
   </footer>
 
   <script>
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; dot.style.left=mx+'px'; dot.style.top=my+'px'; });
+    (function anim(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(anim); })();
+    document.querySelectorAll('a, button, figure').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => { bar.style.width = (window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%'; }, {passive:true});
     const toc = document.getElementById('caseToc');
     const hero = document.querySelector('.case-hero');
     if (toc && hero) {
       const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          toc.classList.toggle('toc-visible', !entry.isIntersecting);
-        });
+        entries.forEach(entry => { toc.classList.toggle('toc-visible', !entry.isIntersecting); });
       }, { threshold: 0 });
       observer.observe(hero);
     }
